@@ -6,7 +6,7 @@
 // The photo and the logo are left for you.
 
 type Cover = { eyebrow: string; heading: string; description: string }
-type PostInput = { id: string; title: string; date: string; cover: Cover }
+type PostInput = { id: string; title: string; date: string; cover: Cover; image?: Uint8Array | null }
 type TemplateInfo = { id: string; name: string; w: number; h: number }
 
 const POSTS_PAGE = 'Posts'
@@ -15,7 +15,7 @@ const PAD = 80
 const GAP = 80
 const SECTION_GAP = 240
 
-figma.showUI(__html__, { width: 420, height: 640, themeColors: true })
+figma.showUI(__html__, { width: 420, height: 720, themeColors: true })
 
 function templatesOnPage(): TemplateInfo[] {
   if (figma.currentPage.name === POSTS_PAGE) return []
@@ -32,6 +32,15 @@ async function setText(node: TextNode, text: string) {
   const fonts = node.getRangeAllFontNames(0, Math.max(node.characters.length, 1))
   await Promise.all(fonts.map((f) => figma.loadFontAsync(f)))
   node.characters = text
+}
+
+// Puts the chosen photo into the template's photo layer (a layer whose name starts with "Photo").
+// FILL scales it to cover the frame and crops the rest; the fades and text stay on top.
+function fillPhoto(frame: FrameNode, hash: string): string[] {
+  const layer = frame.findOne((n) => 'fills' in n && /^photo/i.test(n.name)) as (SceneNode & MinimalFillsMixin) | null
+  if (!layer) return [`${frame.name}: no layer named Photo, so the image was not placed`]
+  layer.fills = [{ type: 'IMAGE', imageHash: hash, scaleMode: 'FILL' }]
+  return []
 }
 
 // Fills the three text layers of a cloned template. Returns what was missing.
@@ -68,10 +77,12 @@ async function create(posts: PostInput[], templateIds: string[]) {
   const made: { post: PostInput; frames: FrameNode[] }[] = []
   for (const post of posts) {
     const frames: FrameNode[] = []
+    const hash = post.image && post.image.length ? figma.createImage(post.image).hash : null
     for (const tpl of templates) {
       const copy = tpl.clone()
       copy.name = `${tpl.name} | ${post.title}`
       warnings.push(...(await fillCover(copy, post.cover)))
+      if (hash) warnings.push(...fillPhoto(copy, hash))
       frames.push(copy)
     }
     made.push({ post, frames })

@@ -43,6 +43,10 @@
 <h2>Templates on this page</h2>
 <div id="templates"><p>Looking…</p></div>
 
+<h2>Background image (optional)</h2>
+<p>One image for every new frame. It replaces the Photo layer; the fades, text and logo stay on top. Leave empty to keep the placeholder.</p>
+<input id="image" type="file" accept="image/*">
+
 <button id="create" class="primary" disabled>Create frames</button>
 <div id="status"></div>
 
@@ -51,6 +55,19 @@
   const send = (msg) => parent.postMessage({ pluginMessage: msg }, '*')
   let posts = []
   let templates = []
+  let image = null // bytes of the one background photo used in every new frame
+
+  // Photos are scaled down to 4096 px on the long side and saved as JPEG, which Figma accepts and keeps the message small.
+  async function readImage(file) {
+    const bmp = await createImageBitmap(file)
+    const scale = Math.min(1, 4096 / Math.max(bmp.width, bmp.height))
+    const canvas = document.createElement('canvas')
+    canvas.width = Math.round(bmp.width * scale)
+    canvas.height = Math.round(bmp.height * scale)
+    canvas.getContext('2d').drawImage(bmp, 0, 0, canvas.width, canvas.height)
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.92))
+    return new Uint8Array(await blob.arrayBuffer())
+  }
 
   const el = (tag, props = {}, kids = []) => {
     const n = Object.assign(document.createElement(tag), props)
@@ -134,6 +151,10 @@
 
   $('save').onclick = () => { send({ type: 'save-settings', address: $('address').value.trim(), token: $('token').value.trim() }); loadClients() }
   $('client').onchange = loadPosts
+  $('image').onchange = async (ev) => {
+    const f = ev.target.files[0]
+    try { image = f ? await readImage(f) : null } catch (e) { image = null; status('Could not read that image: ' + e.message, 'bad') }
+  }
   $('create').onclick = () => {
     const chosen = [...document.querySelectorAll('#posts input:checked')].map((c) => posts[Number(c.value)])
     const templateIds = [...document.querySelectorAll('#templates input:checked')].map((c) => c.value)
@@ -142,7 +163,7 @@
     send({
       type: 'create',
       templateIds,
-      posts: chosen.map((p) => ({ id: p.id, title: p.title, date: String(p.created_at).slice(0, 10), cover: p.cover })),
+      posts: chosen.map((p) => ({ id: p.id, title: p.title, date: String(p.created_at).slice(0, 10), cover: p.cover, image })),
     })
   }
 
