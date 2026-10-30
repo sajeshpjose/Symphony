@@ -186,3 +186,105 @@ export function Empty({ title, children, action }: { title: ReactNode; children?
     </div>
   )
 }
+
+export function Slider({ label, value, onChange, left, right, valueLabel }: {
+  label: string
+  value: number
+  onChange: (v: number) => void
+  left: string
+  right: string
+  valueLabel: string
+}) {
+  return (
+    <div>
+      <div className="flex justify-between text-sm">
+        <span className="font-medium">{label}</span>
+        <span className="text-fg-2">{valueLabel}</span>
+      </div>
+      <input
+        type="range"
+        min={0}
+        max={100}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        aria-label={label}
+        className="mt-2 w-full accent-ink"
+      />
+      <div className="flex justify-between text-xs text-fg-3">
+        <span>{left}</span>
+        <span>{right}</span>
+      </div>
+    </div>
+  )
+}
+
+export function Segmented<T extends string>({ options, value, onChange, label }: {
+  options: { value: T; label: string }[]
+  value: T
+  onChange: (v: T) => void
+  label?: string
+}) {
+  return (
+    <div role="radiogroup" aria-label={label} className="flex gap-1 rounded-md bg-subtle p-1">
+      {options.map((o) => (
+        <button
+          key={o.value}
+          type="button"
+          role="radio"
+          aria-checked={o.value === value}
+          onClick={() => onChange(o.value)}
+          className={clsx(
+            'flex-1 rounded-sm px-3 py-1.5 text-sm whitespace-nowrap transition-colors',
+            o.value === value ? 'bg-surface font-medium text-ink shadow-[0_1px_2px_rgba(0,0,0,0.06)]' : 'text-fg-2 hover:text-ink',
+          )}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+const tagTones = { neutral: 'bg-subtle text-fg-2', ok: 'bg-ok-bg text-ok', bad: 'bg-bad-bg text-bad' }
+
+// Type a word and press Enter (or comma) to add it.
+export function TagInput({ values, onChange, placeholder, tone = 'neutral' }: {
+  values: string[]
+  onChange: (v: string[]) => void
+  placeholder?: string
+  tone?: keyof typeof tagTones
+}) {
+  const add = (raw: string) => {
+    const v = raw.trim().replace(/,$/, '')
+    if (v && !values.some((x) => x.toLowerCase() === v.toLowerCase())) onChange([...values, v])
+  }
+  return (
+    <div className="flex flex-wrap items-center gap-1.5 rounded-md border border-line bg-surface p-1.5 focus-within:border-ink">
+      {values.map((v) => (
+        <span key={v} className={clsx('inline-flex items-center gap-1 rounded-sm px-2 py-1 text-xs font-medium', tagTones[tone])}>
+          {v}
+          <button type="button" aria-label={`Remove ${v}`} onClick={() => onChange(values.filter((x) => x !== v))} className="opacity-60 hover:opacity-100">
+            ×
+          </button>
+        </span>
+      ))}
+      <input
+        className="min-w-32 flex-1 bg-transparent px-1.5 py-1 text-sm outline-none placeholder:text-fg-3"
+        placeholder={values.length ? 'Add more…' : placeholder}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ',') {
+            e.preventDefault()
+            add(e.currentTarget.value)
+            e.currentTarget.value = ''
+          } else if (e.key === 'Backspace' && !e.currentTarget.value && values.length) {
+            onChange(values.slice(0, -1))
+          }
+        }}
+        onBlur={(e) => {
+          add(e.currentTarget.value)
+          e.currentTarget.value = ''
+        }}
+      />
+    </div>
+  )
+}

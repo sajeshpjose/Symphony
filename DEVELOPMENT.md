@@ -34,12 +34,13 @@ Deploy tasks to production with `npm run deploy:trigger`, and add the production
 
 ## Built so far
 - Database: workspaces, clients, voice, examples, facts, research runs, topics, posts, API usage; row-level security; Claude key in Vault; uploads bucket.
-- App: magic-link sign-in, Skipper-styled shell, Clients list, Add client step 1 (Business), Settings · Claude API (save and test key, models per task, batch toggles, monthly cap, usage this month).
-- Functions: `/api/claude-key` (save and test the key).
+- App: magic-link sign-in, Skipper-styled shell, Clients list, Settings · Claude API (save and test key, models per task, batch toggles, monthly cap, usage this month).
+- Add client, all 5 steps: Business; Voice and tone (sliders, traits, live sample by Claude Haiku, editable summary); Rules and claims (word lists, claims, disclaimer, instant rule check); Facts (add, approve, mark needs proof); Examples (loved and disliked posts, "learn from examples"). Client page shows the voice and rules once set up; every step can be edited later.
+- Shared: `voiceBrief()` builds the client brief every Claude call uses (cached); `lintText()` ports the content skill's dash, banned-word and pattern checks.
+- Functions: `/api/claude-key` (save and test the key), `/api/voice-sample`, `/api/learn-voice`.
 - Trigger.dev: config and a `hello-world` task to check the connection.
 
 ## Next
-1. Add client steps 2–5: voice and tone (with live sample), rules and claims, facts, examples.
-2. Research run (long job) and the research report screen.
-3. Next 5 topics, writing posts in a batch, checks, review screen.
-4. Social copy and image keywords.
+1. Research run (Trigger.dev task) and the research report screen.
+2. Next 5 topics, writing posts in a batch, checks, review screen.
+3. Social copy and image keywords.

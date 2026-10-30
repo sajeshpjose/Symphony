@@ -13,7 +13,8 @@
     "typecheck": "npm run typecheck --workspaces --if-present && tsc -p netlify/functions --noEmit && tsc -p tsconfig.json",
     "db:types": "supabase gen types typescript --local > packages/core/src/database.types.ts",
     "dev:trigger": "trigger dev",
-    "deploy:trigger": "trigger deploy --env prod"
+    "deploy:trigger": "trigger deploy --env prod",
+    "gen:banned": "node scripts/gen-banned-words.mjs"
   },
   "devDependencies": {
     "@trigger.dev/build": "^4.8.2",

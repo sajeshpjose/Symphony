@@ -23,6 +23,7 @@ const router = createBrowserRouter([
       { path: 'clients', element: <Clients /> },
       { path: 'clients/new', element: <NewClient /> },
       { path: 'clients/:id', element: <ClientPage /> },
+      { path: 'clients/:id/edit', element: <NewClient /> },
       { path: 'research', element: <Soon title="Research">Research runs and reports for each client.</Soon> },
       { path: 'topics', element: <Soon title="Topics">The next 5 blog topics for each client.</Soon> },
       { path: 'content', element: <Soon title="Content">Posts written by Claude, waiting for your review.</Soon> },

@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router'
 import { CHANNEL_LABELS, CHANNELS, type Channel } from '@symph/core'
 import { Button, Card, Field, Input, Note, PageHeader, Pill, Textarea, cx } from '../components/ui'
+import { useClientBundle } from '../lib/client'
 import { supabase } from '../lib/supabase'
 import { useWorkspace } from '../lib/workspace'
 
@@ -32,16 +33,30 @@ export function NewClient() {
   const nav = useNavigate()
   const qc = useQueryClient()
   const { data: ws } = useWorkspace()
+  const { id } = useParams() // set when editing an existing client
+  const { data: existing } = useClientBundle(id)
   const [f, setF] = useState({ name: '', website: '', industry: '', location: '', sells: '', audience: '', goal: '', success_measure: '' })
   const [channels, setChannels] = useState<Channel[]>([...CHANNELS])
+  useEffect(() => {
+    if (!existing) return
+    const c = existing.client
+    setF({ name: c.name, website: c.website ?? '', industry: c.industry ?? '', location: c.location ?? '', sells: c.sells ?? '', audience: c.audience ?? '', goal: c.goal ?? '', success_measure: c.success_measure ?? '' })
+    setChannels(c.social_channels as Channel[])
+  }, [existing])
   const set = (k: keyof typeof f) => (e: { target: { value: string } }) => setF({ ...f, [k]: e.target.value })
 
   const save = useMutation({
     mutationFn: async () => {
       if (!ws) throw new Error('Workspace not loaded yet')
+      const row = { ...f, website: f.website.replace(/^https?:\/\//, '') || null, social_channels: channels }
+      if (id) {
+        const { error } = await supabase.from('clients').update(row).eq('id', id)
+        if (error) throw error
+        return id
+      }
       const { data, error } = await supabase
         .from('clients')
-        .insert({ ...f, website: f.website.replace(/^https?:\/\//, '') || null, workspace_id: ws.id, social_channels: channels, setup_step: 2 })
+        .insert({ ...row, workspace_id: ws.id, setup_step: 2 })
         .select('id')
         .single()
       if (error) throw error
@@ -49,9 +64,10 @@ export function NewClient() {
       if (vErr) throw vErr
       return data.id as string
     },
-    onSuccess: (id) => {
+    onSuccess: (cid) => {
       qc.invalidateQueries({ queryKey: ['clients'] })
-      nav(`/clients/${id}`)
+      qc.invalidateQueries({ queryKey: ['client', cid] })
+      nav(`/clients/${cid}?step=2`)
     },
   })
 
@@ -63,12 +79,12 @@ export function NewClient() {
       }}
     >
       <PageHeader
-        crumb="Clients  /  Add client"
+        crumb={id ? `Clients  /  ${existing?.client.name ?? ''}` : 'Clients  /  Add client'}
         title="Add client"
-        subtitle="Step 1 of 5 · Business"
+        subtitle={`Step 1 of 5 · Business${id && existing ? ` for ${existing.client.name}` : ''}`}
         actions={
           <>
-            <Link to="/clients"><Button type="button">Cancel</Button></Link>
+            <Link to={id ? `/clients/${id}` : '/clients'}><Button type="button">Cancel</Button></Link>
             <Button variant="primary" type="submit" loading={save.isPending} disabled={!f.name.trim()}>Continue</Button>
           </>
         }
