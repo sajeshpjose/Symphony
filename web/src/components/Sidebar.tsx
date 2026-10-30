@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import { FileText, Lightbulb, LogOut, Search, SlidersHorizontal, Users } from 'lucide-react'
 import { NavLink } from 'react-router'
 import { useAuth } from '../lib/auth'
+import { Mark } from '../report/Mark'
 import { supabase } from '../lib/supabase'
 
 const groups = [
@@ -15,14 +16,8 @@ export function Sidebar() {
   const email = session?.user.email ?? ''
   return (
     <aside className="sticky top-2 flex h-[calc(100vh-16px)] w-[232px] shrink-0 flex-col rounded-lg bg-side p-4 text-side-text">
-      <div className="flex items-center gap-2.5 px-2">
-        <div className="grid size-7 place-items-center rounded-md bg-canvas">
-          <div className="size-3 rounded-[3px] bg-side" />
-        </div>
-        <div>
-          <div className="text-sm font-semibold text-canvas">Symph</div>
-          <div className="text-xs text-side-muted">yello workspace</div>
-        </div>
+      <div className="px-2">
+        <Mark size={28} color="currentColor" className="text-canvas" />
       </div>
       <span className="mt-4 ml-2 w-fit rounded-[3px] bg-highlight px-1.5 py-px text-xs font-medium text-side-active">MVP</span>
       <nav className="mt-5 flex flex-col gap-4">

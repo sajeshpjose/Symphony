@@ -42,7 +42,12 @@ export function ClientPage() {
         crumb={<Link to="/clients">Clients</Link>}
         title={client.name}
         subtitle={[client.website, client.industry, client.location].filter(Boolean).join(' · ')}
-        actions={<Link to={`/research/new?client=${client.id}`}><Button variant="primary">Run research</Button></Link>}
+        actions={
+          <>
+            {ready && <Link to={`/topics?client=${client.id}`}><Button>Topics</Button></Link>}
+            <Link to={`/research/new?client=${client.id}`}><Button variant="primary">Run research</Button></Link>
+          </>
+        }
       />
       <div className="grid grid-cols-[1fr_360px] gap-6">
         <div className="flex flex-col gap-6">

@@ -24,6 +24,21 @@ export type ResearchClaim = {
 
 export type Cited = { text: string; claim_ids: string[]; structural?: boolean }
 export type FactItem = { label: string; value: string; claim_ids: string[] }
+export type ChartPoint = { label: string; value: number; claim_ids: string[]; highlight?: boolean }
+export type ChartSeries = { name: string; items: ChartPoint[] }
+export type ChartBlock = {
+  type: 'chart'
+  kind: 'bar' | 'column' | 'line' // bar: ranked, one series; column: up to three series; line: trends
+  title?: string
+  unit?: string
+  caption?: string // names the source and period
+  claim_ids?: string[] // cited by the title and caption
+  items?: ChartPoint[]
+  series?: ChartSeries[]
+}
+
+// Chart data as series, whichever form the block uses.
+export const chartSeries = (b: ChartBlock): ChartSeries[] => (b.series?.length ? b.series : [{ name: '', items: b.items ?? [] }])
 
 export type Block =
   | { type: 'paragraph'; text: string; claim_ids: string[]; structural?: boolean; lead?: boolean }
@@ -31,6 +46,7 @@ export type Block =
   | { type: 'bullets'; items: Cited[] }
   | { type: 'table'; headers: string[]; rows: Cited[][] }
   | { type: 'facts'; items: FactItem[] }
+  | ChartBlock
 
 export type Section = { key: string; title: string; blocks: Block[] }
 
@@ -111,7 +127,8 @@ const NUMBER_WORDS: Record<string, string> = {
 // Digits in a text. With words=true also number words, so "six services" in a claim allows a "6" in the report.
 export function numbersIn(text: string | null | undefined, words = false): Set<string> {
   const found = new Set<string>()
-  for (const m of (text ?? '').match(NUM_RE) ?? []) found.add(m.replace(/[,\s]/g, '').replace(/\.$/, ''))
+  // Compared by value, so 277, 277.0 and 277.00 match.
+  for (const m of (text ?? '').match(NUM_RE) ?? []) found.add(String(Number(m.replace(/[,\s]/g, '').replace(/\.$/, ''))))
   if (words) {
     const lower = (text ?? '').toLowerCase()
     for (const [w, d] of Object.entries(NUMBER_WORDS)) if (new RegExp(`\\b${w}\\b`).test(lower)) found.add(d)
@@ -198,6 +215,8 @@ const blockIds = (b: Block): string[] => {
       return b.items.flatMap((i) => i.claim_ids ?? [])
     case 'table':
       return b.rows.flatMap((r) => r.flatMap((c) => c.claim_ids ?? []))
+    case 'chart':
+      return [...(b.claim_ids ?? []), ...chartSeries(b).flatMap((ser) => ser.items.flatMap((i) => i.claim_ids ?? []))]
   }
 }
 
@@ -253,6 +272,28 @@ export function validateSections(sections: Section[], claims: ResearchClaim[]): 
           })
           block = rows.length ? { ...b, rows } : null
           if (!rows.length) problem = 'no rows passed'
+          break
+        }
+        case 'chart': {
+          // Every point's value must be in its cited claims; title and caption in the block's claims (build_outputs.py).
+          if (!['bar', 'column', 'line'].includes(b.kind)) {
+            problem = 'chart kind must be bar, column or line'
+            break
+          }
+          // Values sometimes arrive as text ("277"); use numbers from here on.
+          const num = (it: ChartPoint): ChartPoint => ({ ...it, value: typeof it.value === 'string' ? Number(String(it.value).replace(/[,\s]/g, '')) : it.value })
+          block = { ...b, items: b.items?.map(num), series: b.series?.map((ser) => ({ ...ser, items: ser.items.map(num) })) }
+          const series = chartSeries(block)
+          if (!series.length || !series[0].items.length) {
+            problem = 'chart has no points'
+            break
+          }
+          for (const [si, ser] of series.entries())
+            for (const [j, it] of ser.items.entries()) {
+              const p = typeof it.value !== 'number' || !Number.isFinite(it.value) ? 'value is not a number' : refProblem(it.claim_ids, idx, `${it.label} ${it.value}`)
+              if (p && !problem) problem = `series ${si + 1} point ${j + 1}: ${p}`
+            }
+          if (!problem && (b.title || b.caption)) problem = refProblem(b.claim_ids ?? [], idx, `${b.title ?? ''} ${b.caption ?? ''}`, !b.claim_ids?.length)
           break
         }
         default:

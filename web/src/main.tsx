@@ -8,17 +8,21 @@ import { AuthProvider } from './lib/auth'
 import { ClaudeApi } from './routes/ClaudeApi'
 import { ClientPage } from './routes/ClientPage'
 import { Clients } from './routes/Clients'
+import { Content } from './routes/Content'
 import { NewClient } from './routes/NewClient'
+import { PostPage } from './routes/PostPage'
 import { NewResearch } from './routes/NewResearch'
 import { Research } from './routes/Research'
+import { ResearchPdf } from './routes/ResearchPdf'
 import { ResearchRun } from './routes/ResearchRun'
 import { SignIn } from './routes/SignIn'
-import { Soon } from './routes/Soon'
+import { Topics } from './routes/Topics'
 
 const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: 30_000, retry: 1 } } })
 
 const router = createBrowserRouter([
   { path: '/sign-in', element: <SignIn /> },
+  { path: '/research/:id/pdf', element: <ResearchPdf /> },
   {
     element: <Layout />,
     children: [
@@ -30,8 +34,9 @@ const router = createBrowserRouter([
       { path: 'research', element: <Research /> },
       { path: 'research/new', element: <NewResearch /> },
       { path: 'research/:id', element: <ResearchRun /> },
-      { path: 'topics', element: <Soon title="Topics">The next 5 blog topics for each client.</Soon> },
-      { path: 'content', element: <Soon title="Content">Posts written by Claude, waiting for your review.</Soon> },
+      { path: 'topics', element: <Topics /> },
+      { path: 'content', element: <Content /> },
+      { path: 'content/:id', element: <PostPage /> },
       { path: 'settings', element: <ClaudeApi /> },
     ],
   },

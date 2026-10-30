@@ -14,6 +14,12 @@ export type ClientRow = {
   goal: string | null
   success_measure: string | null
   social_channels: string[]
+  author_name: string | null
+  author_role: string | null
+  cta_text: string | null
+  cta_url: string | null
+  services: { name: string; url?: string }[]
+  figma_url: string | null
   status: 'setup' | 'active' | 'paused'
   setup_step: number
 }

@@ -3,6 +3,7 @@ import { Navigate } from 'react-router'
 import { Button, Field, Input, Note } from '../components/ui'
 import { useAuth } from '../lib/auth'
 import { supabase, supabaseConfigured } from '../lib/supabase'
+import { Mark } from '../report/Mark'
 
 export function SignIn() {
   const { session } = useAuth()
@@ -25,8 +26,8 @@ export function SignIn() {
   return (
     <div className="grid min-h-full place-items-center p-6">
       <div className="w-full max-w-sm">
-        <h1 className="font-serif text-[40px] leading-10 tracking-[-0.5px]">Symph</h1>
-        <p className="mt-2 text-fg-2">Research, topics and posts for every client.</p>
+        <Mark size={44} color="currentColor" className="text-ink" />
+        <p className="mt-5 text-fg-2">Research, topics and posts for every client.</p>
         {!supabaseConfigured && (
           <div className="mt-6">
             <Note tone="warn" title="Supabase is not connected">
