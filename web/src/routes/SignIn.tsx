@@ -14,9 +14,10 @@ export function SignIn() {
   async function submit(e: FormEvent) {
     e.preventDefault()
     setState('sending')
-    const { error } = await supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.origin } })
+    // Existing accounts only. New people are added in Supabase → Authentication → Users → Invite.
+    const { error } = await supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.origin, shouldCreateUser: false } })
     if (error) {
-      setError(error.message)
+      setError(/sign.?ups? not allowed|not found|otp_disabled/i.test(error.message) ? 'This email does not have access. Ask the workspace owner for an invite.' : error.message)
       setState('error')
     } else setState('sent')
   }

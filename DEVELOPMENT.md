@@ -17,6 +17,9 @@
 5b. In a second Terminal tab, start the background worker: `npm run dev:trigger` (see Trigger.dev below).
 6. Sign in with your email, open Settings, paste your Anthropic API key and press "Save and test".
 
+## Who can sign in
+Sign-in is for existing accounts only (`shouldCreateUser: false`). To give someone access: Supabase → Authentication → Users → Invite user. Keep "Allow new users to sign up" turned off in Supabase → Authentication → Sign In / Providers.
+
 ## Trigger.dev (long jobs)
 Research runs and post batches run as Trigger.dev tasks in `src/trigger/`, configured in `trigger.config.ts` (project `proj_upzozzqxpiovdxrciytc`).
 
