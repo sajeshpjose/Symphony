@@ -53,7 +53,7 @@ export async function toolCall<T>(ctx: CallCtx, args: ToolCallArgs): Promise<T> 
 
     const out = res.content.find((b) => b.type === 'tool_use' && b.name === args.toolName)
     if (out && out.type === 'tool_use') return out.input as T
-    if (res.stop_reason === 'max_tokens') throw new Error('Claude ran out of room before finishing. Try again with fewer pages.')
+    if (res.stop_reason === 'max_tokens') throw new Error(`Claude hit the ${args.maxTokens}-token output limit before finishing (${args.toolName}).`)
     // Paused server-tool turn, or Claude answered in text: continue and ask for the tool call.
     messages.push({ role: 'assistant', content: res.content as Anthropic.ContentBlockParam[] })
     if (res.stop_reason !== 'pause_turn') {

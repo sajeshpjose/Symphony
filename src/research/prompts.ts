@@ -51,7 +51,11 @@ For each business:
 3. Record observable facts as claims, each with an exact quote under 15 words and the page ref: services that overlap, area served, displayed pricing, guarantees, certifications, content activity. Section "competitors". Evidence "stated". Decision "included" if the business qualifies, otherwise "question".
 Never state strengths, weaknesses, undisplayed prices, size or revenue.`
 
-export const WRITE_INSTRUCTION = (args: { name: string; claimsJson: string; competitorSummary: string; reviewSample?: string }) => `Write the version 1 report for ${args.name} from the claims below, and the internal list of questions for the first meeting.
+export const WRITE_INSTRUCTION = (args: { name: string; claimsJson: string; competitorSummary: string; reviewSample?: string; part: 'report' | 'questions' }) => `${
+  args.part === 'report'
+    ? `Write the version 1 report for ${args.name} from the claims below. Return only the report sections; the meeting questions are written in a separate step.`
+    : `Write the internal list of questions for the first meeting with ${args.name}, from the claims below. Return only the questions; the report is written in a separate step.`
+}
 
 Claims (only "included" ones may be cited in the report; "question" ones feed the question list):
 ${args.claimsJson}
@@ -164,7 +168,7 @@ const cited = {
   required: ['text', 'claim_ids'],
 }
 
-export const WRITE_SCHEMA = {
+const WRITE_SCHEMA = {
   type: 'object',
   properties: {
     sections: {
@@ -222,3 +226,6 @@ export const WRITE_SCHEMA = {
   },
   required: ['sections', 'questions'],
 }
+
+export const REPORT_SCHEMA = { type: 'object', properties: { sections: WRITE_SCHEMA.properties.sections }, required: ['sections'] }
+export const QUESTIONS_SCHEMA = { type: 'object', properties: { questions: WRITE_SCHEMA.properties.questions }, required: ['questions'] }

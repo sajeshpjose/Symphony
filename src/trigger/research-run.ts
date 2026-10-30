@@ -27,8 +27,9 @@ import {
   COMPETITOR_FACTS_SCHEMA,
   COMPETITOR_SEARCH_INSTRUCTION,
   RESEARCH_SYSTEM,
+  QUESTIONS_SCHEMA,
+  REPORT_SCHEMA,
   WRITE_INSTRUCTION,
-  WRITE_SCHEMA,
 } from '../research/prompts'
 
 const MAX_CLIENT_PAGES = 25
@@ -208,7 +209,7 @@ export const researchRun = schemaTask({
         ],
         toolName: 'record_claims',
         schema: CLAIMS_SCHEMA,
-        maxTokens: 16000,
+        maxTokens: 32000,
       })
       const raw: RawClaim[] = [...(extracted.claims ?? [])]
 
@@ -223,7 +224,7 @@ export const researchRun = schemaTask({
             content: COMPETITOR_SEARCH_INSTRUCTION({ name: client.name, url: website ?? '', services: extracted.services ?? [], area: extracted.area ?? client.location ?? '', known }),
             toolName: 'competitor_candidates',
             schema: CANDIDATES_SCHEMA,
-            maxTokens: 3000,
+            maxTokens: 8000,
             webSearch: { maxUses: 4 },
           })
           const clientHost = website ? new URL(website).hostname.replace(/^www\./, '') : ''
@@ -262,7 +263,7 @@ export const researchRun = schemaTask({
               ],
               toolName: 'competitor_facts',
               schema: COMPETITOR_FACTS_SCHEMA,
-              maxTokens: 8000,
+              maxTokens: 16000,
             })
             // A competitor goes in the report only if it was named or passes both tests (decision D22).
             const qualifies = new Map(
@@ -352,16 +353,25 @@ export const researchRun = schemaTask({
       const forWriter = claims
         .filter((c) => c.status !== 'dropped')
         .map((c) => ({ id: c.id, section: c.section, text: c.text, quote: c.quote, evidence: c.evidence, status: c.status, competitor: c.competitor, note: c.note }))
-      const written = await toolCall<{ sections: Section[]; questions: Omit<Question, 'id'>[] }>(call, {
-        content: WRITE_INSTRUCTION({ name: client.name, claimsJson: JSON.stringify(forWriter), competitorSummary, reviewSample: places.sample }),
+      // Two calls, so a long report and a long question list each get the full output budget.
+      const writeArgs = { name: client.name, claimsJson: JSON.stringify(forWriter), competitorSummary, reviewSample: places.sample }
+      const written = await toolCall<{ sections: Section[] }>(call, {
+        content: WRITE_INSTRUCTION({ ...writeArgs, part: 'report' }),
         toolName: 'write_report',
-        schema: WRITE_SCHEMA,
+        schema: REPORT_SCHEMA,
+        maxTokens: 32000,
+      })
+      await progress('write', 'Writing the meeting questions')
+      const asked = await toolCall<{ questions: Omit<Question, 'id'>[] }>(call, {
+        content: WRITE_INSTRUCTION({ ...writeArgs, part: 'questions' }),
+        toolName: 'write_questions',
+        schema: QUESTIONS_SCHEMA,
         maxTokens: 16000,
       })
 
       const valid = validateSections(undashSections(written.sections ?? []), claims)
       warnings.push(...valid.warnings)
-      const questions: Question[] = (written.questions ?? []).map((q, i) => ({ ...q, id: `Q${String(i + 1).padStart(2, '0')}` }))
+      const questions: Question[] = (asked.questions ?? []).map((q, i) => ({ ...q, id: `Q${String(i + 1).padStart(2, '0')}` }))
 
       const report: ReportData = {
         version: 'v1',
