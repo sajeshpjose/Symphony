@@ -16,3 +16,9 @@ Internal content platform for the yello agency. Read docs/10-mvp-scope.md first;
 - Writing rules for generated content: plain language, no em or en dashes, banned words in skills/client-content-pack/references/banned-words.txt.
 - UI copy: short, plain, no jargon. Match the Figma "MVP" page.
 - samples/ holds real client research and is not committed.
+
+<!-- TRIGGER.DEV SKILLS START -->
+## Trigger.dev agent skills
+
+This project has Trigger.dev agent skills installed in `.claude/skills/`. Before writing or changing Trigger.dev code (background tasks, scheduled tasks, realtime, or chat.agent AI agents), load the most relevant skill: `trigger-authoring-chat-agent`, `trigger-cost-savings`, `trigger-realtime-and-frontend`.
+<!-- TRIGGER.DEV SKILLS END -->
