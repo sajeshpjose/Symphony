@@ -1,7 +1,7 @@
 // Symph covers: makes new cover frames from a client's templates, one set per post, with the cover text Symph wrote.
 // The templates are only ever cloned. They are never edited, moved or replaced.
 //
-// Template frames are the top-level frames on the current page whose name ends in a size, for example
+// Template frames are the top-level frames, on any page except Posts, whose name includes a size, for example
 // "Instagram - 1080x1350". Inside each, text layers named Eyebrow, Heading and Description are filled in.
 // The photo and the logo are left for you.
 
@@ -17,15 +17,21 @@ const SECTION_GAP = 240
 
 figma.showUI(__html__, { width: 420, height: 720, themeColors: true })
 
-function templatesOnPage(): TemplateInfo[] {
-  if (figma.currentPage.name === POSTS_PAGE) return []
-  return figma.currentPage.children
-    .filter((n): n is FrameNode => n.type === 'FRAME' && SIZE_IN_NAME.test(n.name))
-    .map((n) => ({ id: n.id, name: n.name, w: Math.round(n.width), h: Math.round(n.height) }))
+// Template frames can be on any page except Posts, so you can run the plugin from wherever you are.
+async function findTemplates(): Promise<TemplateInfo[]> {
+  const found: TemplateInfo[] = []
+  for (const page of figma.root.children) {
+    if (page.name === POSTS_PAGE) continue
+    await page.loadAsync()
+    for (const n of page.children) {
+      if (n.type === 'FRAME' && SIZE_IN_NAME.test(n.name)) found.push({ id: n.id, name: n.name, w: Math.round(n.width), h: Math.round(n.height) })
+    }
+  }
+  return found
 }
 
-function sendTemplates() {
-  figma.ui.postMessage({ type: 'templates', page: figma.currentPage.name, templates: templatesOnPage() })
+async function sendTemplates() {
+  figma.ui.postMessage({ type: 'templates', page: figma.currentPage.name, templates: await findTemplates() })
 }
 
 async function setText(node: TextNode, text: string) {
@@ -129,22 +135,22 @@ figma.ui.onmessage = async (msg: { type: string; [k: string]: unknown }) => {
         figma.clientStorage.getAsync('clientId'),
       ])
       figma.ui.postMessage({ type: 'init', address: address ?? '', token: token ?? '', clientId: clientId ?? '' })
-      sendTemplates()
+      await sendTemplates()
     } else if (msg.type === 'save-settings') {
       await figma.clientStorage.setAsync('address', msg.address)
       await figma.clientStorage.setAsync('token', msg.token)
     } else if (msg.type === 'save-client') {
       await figma.clientStorage.setAsync('clientId', msg.clientId)
     } else if (msg.type === 'scan') {
-      sendTemplates()
+      await sendTemplates()
     } else if (msg.type === 'create') {
       const result = await create(msg.posts as PostInput[], msg.templateIds as string[])
       figma.ui.postMessage({ type: 'done', ...result })
-      sendTemplates()
+      await sendTemplates()
     }
   } catch (e) {
     figma.ui.postMessage({ type: 'error', message: (e as Error).message })
   }
 }
 
-figma.on('currentpagechange', sendTemplates)
+figma.on('currentpagechange', () => { void sendTemplates() })

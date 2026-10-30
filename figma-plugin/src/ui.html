@@ -40,7 +40,7 @@
 <h2>Posts</h2>
 <div id="posts"><p>Pick a client to see posts that have cover text.</p></div>
 
-<h2>Templates on this page</h2>
+<h2>Templates in this file</h2>
 <div id="templates"><p>Looking…</p></div>
 
 <h2>Background image (optional)</h2>
@@ -113,7 +113,7 @@
   function renderTemplates() {
     const box = $('templates')
     if (!templates.length) {
-      box.replaceChildren(el('p', { textContent: 'No template frames here. Open the page with your templates (frames named like "Instagram - 1080x1350").' }))
+      box.replaceChildren(el('p', { textContent: 'No template frames found. Template frames are named with their size, like "Instagram - 1080x1350", and sit on any page except Posts.' }))
       refreshButton()
       return
     }

@@ -14,13 +14,13 @@ The templates are only ever cloned, never edited. Each run adds a new section pe
 3. In Figma desktop: Plugins, Development, **Import plugin from manifest…**, choose `figma-plugin/manifest.json`.
 
 ## Per client
-- Keep one Figma file per client with the template frames on one page. Name each frame with its size, for example
+- Keep one Figma file per client with the template frames at the top level of a page. Name each frame with its size, for example
   `Instagram - 1080x1350`. Inside, keep text layers named `Eyebrow`, `Heading` and `Description`.
   Put the client's logo on the templates once. The photo is yours to swap on each new frame.
 - Add the file link to the client in Symph (Business details, Social templates).
 
 ## Each time
-1. Open the client's file on the page with the templates, then run Plugins, Development, **Symph covers**.
+1. Open the client's file, then run Plugins, Development, **Symph covers**. It finds the templates on any page except Posts.
 2. First run: paste the address (your Symph site) and the token. They are remembered.
 3. Pick the client, tick the posts and the templates, press **Create frames**.
 4. Replace the photo on each new frame.
