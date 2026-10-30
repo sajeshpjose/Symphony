@@ -5,6 +5,7 @@ Internal content platform for the yello agency. Read docs/10-mvp-scope.md first;
 ## Layout
 - web/ — Vite + React + TypeScript app (React Router 7, TanStack Query, Tailwind 4). Skipper design tokens in web/src/index.css; small UI kit in web/src/components/ui.tsx.
 - netlify/functions/ — short server calls (30 s limit). Shared helpers in _shared/ (auth via Supabase session, Claude client from Vault, usage logging, cap check).
+- src/trigger/ + trigger.config.ts — Trigger.dev tasks for long jobs (research runs, post batches). Import from "@trigger.dev/sdk" only (never /v3), export every task, use built-in fetch, never wrap wait.* or triggerAndWait in Promise.all.
 - packages/core/ — models, prices, shared jsonb types. Prices must match https://platform.claude.com/docs/en/about-claude/pricing.
 - supabase/migrations/ — schema and row-level security. Every table carries workspace_id; policies use public.is_member().
 - skills/ — the two Claude skills whose prompts and rules the app ports (client-intelligence-report, client-content-pack).

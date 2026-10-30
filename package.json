@@ -10,17 +10,22 @@
     "dev": "netlify dev",
     "dev:web": "npm run dev -w web",
     "build": "npm run build -w web",
-    "typecheck": "npm run typecheck --workspaces --if-present && tsc -p netlify/functions --noEmit",
-    "db:types": "supabase gen types typescript --local > packages/core/src/database.types.ts"
+    "typecheck": "npm run typecheck --workspaces --if-present && tsc -p netlify/functions --noEmit && tsc -p tsconfig.json",
+    "db:types": "supabase gen types typescript --local > packages/core/src/database.types.ts",
+    "dev:trigger": "trigger dev",
+    "deploy:trigger": "trigger deploy --env prod"
   },
   "devDependencies": {
+    "@trigger.dev/build": "^4.8.2",
     "@types/node": "^26.6.6",
+    "trigger.dev": "^4.8.2",
     "typescript": "~7.0.2"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.3.0",
     "@netlify/functions": "^6.0.3",
     "@supabase/supabase-js": "^2.118.0",
+    "@trigger.dev/sdk": "^4.8.2",
     "zod": "^4.6.7"
   }
 }

@@ -13,3 +13,6 @@ supabase/.branches/
 samples/
 # Stray folder from an earlier copy
 {docs,skills,samples/
+
+# Trigger.dev
+.trigger
