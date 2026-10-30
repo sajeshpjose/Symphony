@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: creatives-with-chosen-photo
+expected_outcome: |
+  A blog.md with a short answer first, question subheadings, quick answers and a next step; blog.html with Article and FAQPage markup; posts.json within limits; three creatives rendered on the chosen photo with the logo, three text lines only and no frame in frame. All lint checks pass.
+context:
+  scaffold_script: place-files.sh

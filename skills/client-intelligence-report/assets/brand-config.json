@@ -1,0 +1,16 @@
+{
+  "agency_name": "",
+  "website": "dotyello.com",
+  "contact_email": "hello@dotyello.com",
+  "primary_color": "#222222",
+  "accent_color": "#D9A520",
+  "text_color": "#222222",
+  "muted_color": "#6B6B6B",
+  "light_bg": "#F4F3F0",
+  "rule_color": "#DDDBD6",
+  "heading_font": "Poppins",
+  "body_font": "Liberation Sans",
+  "logo_svg": "assets/yello-mark.svg",
+  "logo_mark": "builtin-yello",
+  "logo_path": ""
+}

@@ -1,0 +1,15 @@
+{
+  "_note": "FICTIONAL example. The application writes this file when a client is onboarded. Logo paths are relative to this file.",
+  "client": {"name": "Birch & Co. Landscaping", "website": "https://birchandco.example", "location": "Toronto, Ontario", "industry": "Landscaping and outdoor services", "language": "en-CA"},
+  "brand": {"primary": "#1F3D2B", "accent": "#E3B341", "logo_path": "example-logo.png", "logo_mode": "white", "logo_position": "top-left", "logo_url": "https://birchandco.example/logo.png", "heading_font": "", "body_font": ""},
+  "services": [
+    {"name": "Lawn care", "url": "https://birchandco.example/lawn-care"},
+    {"name": "Seasonal clean-ups", "url": "https://birchandco.example/seasonal-cleanups"},
+    {"name": "Snow removal", "url": "https://birchandco.example/snow-removal"}
+  ],
+  "audiences": ["Homeowners in the Greater Toronto Area"],
+  "cta": {"text": "Book a free quote", "url": "https://birchandco.example/quote"},
+  "author": {"name": "Mark Birch", "role": "Owner"},
+  "voice": {"notes": "Warm, practical, plain words"},
+  "banned_words": []
+}

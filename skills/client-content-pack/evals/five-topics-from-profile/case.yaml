@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: five-topics-from-profile
+expected_outcome: |
+  Exactly five topics as questions, each with who asks, a linked service from the profile, image keywords (primary and two alternates), creative copy within the limits, and three short posts. Preview creatives rendered with the logo. No images generated. The user is asked which topics to write up and to send photos.
+context:
+  scaffold_script: place-files.sh

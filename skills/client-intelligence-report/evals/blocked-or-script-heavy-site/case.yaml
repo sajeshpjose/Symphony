@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: blocked-or-script-heavy-site
+expected_outcome: |
+  The skill tells the user it could not read the site and asks for pasted text or a brand deck instead of guessing.

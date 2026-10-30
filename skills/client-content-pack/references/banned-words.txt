@@ -1,0 +1,106 @@
+# One entry per line. A trailing * matches any ending (leverag* matches leverage, leveraging).
+# Phrases are matched as written. Case does not matter.
+delve*
+tapestry
+landscape of
+digital landscape
+realm
+leverag*
+unlock*
+unleash*
+elevat*
+seamless*
+robust
+game-changer
+game changer
+revolutioniz*
+transformative
+cutting-edge
+cutting edge
+state-of-the-art
+innovative
+holistic
+synerg*
+empower*
+embark*
+journey
+navigat*
+foster*
+harness*
+testament
+pivotal
+paramount
+crucial
+comprehensive
+meticulous*
+intricate*
+nuanced
+multifaceted
+vibrant
+bustling
+ever-evolving
+ever evolving
+fast-paced
+rapidly changing
+in today's
+in the world of
+when it comes to
+at the end of the day
+look no further
+it is important to note
+it's important to note
+it's worth noting
+worth noting
+needless to say
+in conclusion
+to sum up
+moreover
+furthermore
+additionally
+consequently
+in essence
+ultimately
+underscor*
+showcas*
+streamlin*
+optimiz*
+elevated
+curated
+bespoke
+tailored solutions
+one-stop
+one stop
+take it to the next level
+next level
+dive into
+deep dive
+deep-dive
+unlocking
+whether you're
+whether you are
+not just
+more than just
+not only
+so much more
+peace of mind
+rest assured
+stay ahead of the curve
+ahead of the curve
+beacon
+cornerstone
+plethora
+myriad
+a wide range of
+wide array
+array of
+ensure*
+ensuring
+utiliz*
+facilitat*
+endeavor*
+commence*
+best-in-class
+world-class
+second to none
+trusted partner
+partner in success

@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: typical-small-business-site
+expected_outcome: |
+  A short client PDF with only well-evidenced sections, a separate internal questions document and a claims ledger. No hedging or internal labels in the PDF.

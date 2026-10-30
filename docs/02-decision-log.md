@@ -1,0 +1,35 @@
+# Decision log
+
+| # | Decision | Reason | Status |
+|---|---|---|---|
+| D1 | Start with an internal agency tool, not a public product | The public market is crowded at USD 6 to 30 a month; platform approvals and Google spam policy add risk; the agency need is immediate | Decided |
+| D2 | Keep the option of a public product later, but build nothing for it now | Phase 1 engine (cron plus API) is the only route that could grow into it | Decided |
+| D3 | Charge a hybrid: base fee plus per qualified lead | Pure per-lead has months of lag, quality disputes and factors outside the agency's control | Decided, figures assumed |
+| D4 | A lead counts when the session landed on a post the agency published or came via a tagged social link; written definition, seven-day dispute window, monthly frozen ledger | Simple to measure in GA4, hard to dispute | Decided |
+| D5 | Use the Anthropic API with prepaid credits and a spend cap, not the Claude subscription, for the app | Subscription usage cannot be drawn by a custom app; API returns usage counts for cost tracking | Decided |
+| D6 | Batch API for the weekly pipeline, prompt caching for brand voice, small model for filtering, mid model for drafting | Roughly halves cost; weekly cadence does not need real time; no time-of-day pricing exists | Decided |
+| D7 | Research is a separate Claude skill run by hand, not part of the app | Faster to iterate, runs on the plan not the API, outputs feed the app | Superseded by D27 for the MVP |
+| D8 | Only well-evidenced claims go in the client report; everything else becomes an interview question in a separate internal document | Protects credibility; the user shares the PDF with clients | Decided and enforced by scripts |
+| D9 | Report design to international consultancy standard, yello symbol only, no brand name text | User instruction | Decided |
+| D10 | Recreate Google Analytics graphs from exported data; never paste screenshots | Looks professional, is verifiable | Decided |
+| D11 | Action points section in the report, each tied to a documented gap, says what to do, never promises results | Keeps the evidence rule while giving clients direction | Decided |
+| D12 | Content: five topics a month per client, answer-first blogs with question subheadings, FAQ markup, very short social posts | Built for answer engines and agents; user wants simple language | Decided |
+| D13 | Creatives carry only eyebrow, heading, description and logo; no frame in frame; photo edge to edge with a soft fade | User instruction | Decided and enforced by renderer |
+| D14 | The user chooses every image; the app only gives search keywords | User instruction, licence control | Decided |
+| D15 | Figma brand templates are optional per client; brand kit lives in the app | Figma API cannot edit layers unattended; per-client setup is costly; renderer already covers creatives | Decided |
+| D16 | Social publishing through a posting service (Postiz self-hosted or cloud, or Ayrshare), not direct platform APIs at first | Weeks of app review otherwise; X charges per post | Decided, vendor open |
+| D17 | Client approval via long random link, no login, four posts per batch, edits reset approval, no auto-approve on silence | Lowest friction, keeps a record, silence is not consent | Decided |
+| D18 | Fix tracking before publishing; both real clients had GA4 problems | Impact cannot be proven otherwise | Decided (gate) |
+| D19 | Research, then interview, then research v2; goals and lead definition agreed before content | Interview questions come from real gaps; billing depends on the definition | Decided |
+| D20 | Build the monthly loop first, then reporting, then onboarding, then extras | Monthly loop runs for every client every month; onboarding can stay semi-manual with the skills | Superseded by D29 |
+| D21 | Figma design file lives in the personal team, not the employer's organisation | Ownership of an independent product | Decided |
+| D22 | Competitors enter the client report only if their own site shows at least two overlapping services and an overlapping area | Avoids guessed comparisons | Decided and enforced |
+| D23 | Review themes stated only from 10 or more reviews with a theme in at least 30 percent; five-review samples become questions | Avoids overclaiming from thin samples | Decided |
+| D24 | Meta-reported leads and GA4 key events are shown side by side, never reconciled by the tool | They measure different things | Decided |
+| D25 | Creatives keep five formats: Instagram post, Instagram story, LinkedIn, Facebook, blog cover | User decision, Oct 29, 2026; replaces "three creatives" in the PRD | Decided |
+| D26 | Client approval is one monthly batch of four posts in one link; posts publish weekly | User confirmed Oct 29, 2026; resolves the weekly vs monthly wording in the PRD and architecture | Decided |
+| D27 | Research runs inside the app through the Claude API in the MVP | User wants add client, link the API and run research as the first release | Decided |
+| D28 | MVP scope: Claude API settings, add client (business, voice, rules, facts, examples), research, next 5 blog topics with no client approval, blog writing with checks, your review, social copy, image search keywords. Out: approval links, gates, publishing, creatives, leads, reports | User decision, Oct 29, 2026 | Decided; Figma page "MVP", docs/10-mvp-scope.md |
+| D29 | Build order: MVP first (D28), then approval and publishing, then reporting and leads, then extras | Gets the content engine working on real clients before the client-facing parts | Decided |
+| D30 | The MVP uses the Skipper design system as visual inspiration: ivory and ink palette, dark sidebar, Newsreader serif page titles, Inter body, 4 to 8 px corners | User request, Oct 29, 2026 | Applied to the MVP page and the app |
+| D31 | Stack: Vite + React + TypeScript (web), Supabase (Postgres, Auth, Storage, Vault, Realtime), Netlify (hosting and short functions), Anthropic TypeScript SDK; long jobs on Trigger.dev pending confirmation | Matches the Skipper stack; serverless limits are too short for research runs | Decided, Trigger.dev open |

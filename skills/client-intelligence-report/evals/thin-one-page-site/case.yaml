@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: thin-one-page-site
+expected_outcome: |
+  A short report (overview and offerings only, plus sources) built with --no-verify from the pasted text, no competitor or market sections, and at least 15 questions covering the gaps. The summary says quotes were not machine-verified.
+context:
+  scaffold_script: place-files.sh

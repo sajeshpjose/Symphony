@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.netlify/
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log
+supabase/.temp/
+supabase/.branches/
+
+# Real client research stays out of git
+samples/
+# Stray folder from an earlier copy
+{docs,skills,samples/

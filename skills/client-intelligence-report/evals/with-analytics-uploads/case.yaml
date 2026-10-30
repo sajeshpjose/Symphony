@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: with-analytics-uploads
+expected_outcome: |
+  The report includes a Search demand section built from the Search Console blocks of the export, keeps GA4 traffic and lead figures out of the PDF because the tracking sanity check fails, lists the tracking problem as an opportunity and a must-ask question, and includes Google ratings for the client and competitors.
+context:
+  scaffold_script: place-files.sh

@@ -1,0 +1,661 @@
+{
+  "_note": "FICTIONAL example for format and testing only. All businesses and URLs are invented (.example domains).",
+  "version": "v1",
+  "date": "2026-10-29",
+  "client": {
+    "name": "Birch & Co. Landscaping",
+    "url": "https://birchandco.example",
+    "location": "Toronto, Ontario",
+    "industry": "Landscaping and outdoor services"
+  },
+  "claims": [
+    {
+      "id": "C001",
+      "section": "overview",
+      "text": "Birch & Co. Landscaping serves homes across the Greater Toronto Area.",
+      "quote": "homes across the Greater Toronto Area",
+      "source_url": "https://birchandco.example/about",
+      "source_title": "About",
+      "evidence": "stated",
+      "status": "included",
+      "note": ""
+    },
+    {
+      "id": "C002",
+      "section": "overview",
+      "text": "The business states it has served homeowners since 2009.",
+      "quote": "serving homeowners since 2009",
+      "source_url": "https://birchandco.example/about",
+      "source_title": "About",
+      "evidence": "stated",
+      "status": "included",
+      "note": ""
+    },
+    {
+      "id": "C003",
+      "section": "offerings",
+      "text": "The site lists six services: lawn care, garden design, seasonal clean-ups, snow removal, tree care and irrigation.",
+      "quote": "lawn care, garden design, seasonal clean-ups",
+      "source_url": "https://birchandco.example/services",
+      "source_title": "Services",
+      "evidence": "stated",
+      "status": "included",
+      "note": ""
+    },
+    {
+      "id": "C004",
+      "section": "offerings",
+      "text": "Snow removal is offered as seasonal contracts for homes.",
+      "quote": "seasonal snow contracts for homes",
+      "source_url": "https://birchandco.example/services/snow",
+      "source_title": "Snow removal",
+      "evidence": "stated",
+      "status": "included",
+      "note": ""
+    },
+    {
+      "id": "C005",
+      "section": "offerings",
+      "text": "Every garden design project starts with a site visit.",
+      "quote": "every design starts with a site visit",
+      "source_url": "https://birchandco.example/services/design",
+      "source_title": "Garden design",
+      "evidence": "stated",
+      "status": "included",
+      "note": ""
+    },
+    {
+      "id": "C006",
+      "section": "aspirations",
+      "text": "The About page states a mission to create outdoor spaces that people can enjoy all year.",
+      "quote": "outdoor spaces you can enjoy all year",
+      "source_url": "https://birchandco.example/about",
+      "source_title": "About",
+      "evidence": "stated",
+      "status": "included",
+      "note": ""
+    },
+    {
+      "id": "C007",
+      "section": "audiences",
+      "text": "The 12 pages reviewed on this site do not mention commercial properties.",
+      "quote": "",
+      "source_url": "https://birchandco.example/services",
+      "source_title": "Services",
+      "evidence": "observed_absence",
+      "status": "included",
+      "note": "Read services, about, blog, contact, FAQ"
+    },
+    {
+      "id": "C008",
+      "section": "audiences",
+      "text": "Testimonials on the site mention reliability and tidy work.",
+      "quote": "always on time and left the yard spotless",
+      "source_url": "https://birchandco.example/reviews",
+      "source_title": "Testimonials",
+      "evidence": "stated",
+      "status": "included",
+      "note": ""
+    },
+    {
+      "id": "C009",
+      "section": "competitors",
+      "text": "Northfield Lawn Care lists lawn care, snow removal and pest control on its own website.",
+      "quote": "lawn care, snow removal, pest control",
+      "source_url": "https://northfieldlawn.example/services",
+      "source_title": "Northfield services",
+      "evidence": "stated",
+      "status": "included",
+      "note": ""
+    },
+    {
+      "id": "C010",
+      "section": "competitors",
+      "text": "GreenLeaf Outdoor lists garden design, irrigation and tree care on its own website.",
+      "quote": "garden design, irrigation and tree care",
+      "source_url": "https://greenleaf.example/what-we-do",
+      "source_title": "GreenLeaf services",
+      "evidence": "stated",
+      "status": "included",
+      "note": ""
+    },
+    {
+      "id": "C011",
+      "section": "competitors",
+      "text": "Northfield Lawn Care offers 24-hour emergency snow clearing.",
+      "quote": "24-hour emergency snow clearing",
+      "source_url": "https://northfieldlawn.example/snow",
+      "source_title": "Northfield snow",
+      "evidence": "stated",
+      "status": "included",
+      "note": ""
+    },
+    {
+      "id": "C012",
+      "section": "opportunities",
+      "text": "The pages reviewed on this site do not mention emergency snow response.",
+      "quote": "",
+      "source_url": "https://birchandco.example/services/snow",
+      "source_title": "Snow removal",
+      "evidence": "observed_absence",
+      "status": "included",
+      "note": ""
+    },
+    {
+      "id": "C013",
+      "section": "audiences",
+      "text": "The business probably wants more commercial work.",
+      "quote": "",
+      "source_url": "",
+      "source_title": "",
+      "evidence": "inferred",
+      "status": "question",
+      "note": "Ask in meeting"
+    },
+    {
+      "id": "C014",
+      "section": "overview",
+      "text": "A business directory says the company has 20 employees.",
+      "quote": "20 employees",
+      "source_url": "https://directory.example/birch",
+      "source_title": "Directory",
+      "evidence": "single_external",
+      "status": "question",
+      "note": "Single source"
+    },
+    {
+      "id": "C015",
+      "section": "overview",
+      "text": "Directory lists founding year 2008, conflicting with the site.",
+      "quote": "founded 2008",
+      "source_url": "https://directory.example/birch",
+      "source_title": "Directory",
+      "evidence": "single_external",
+      "status": "dropped",
+      "note": "Conflict with C002"
+    }
+  ],
+  "sections": [
+    {
+      "key": "summary",
+      "title": "Executive summary",
+      "blocks": [
+        {
+          "type": "bullets",
+          "items": [
+            {
+              "text": "Birch & Co. Landscaping serves homes across the Greater Toronto Area.",
+              "claim_ids": [
+                "C001"
+              ]
+            },
+            {
+              "text": "The business states it has served homeowners since 2009.",
+              "claim_ids": [
+                "C002"
+              ]
+            },
+            {
+              "text": "The site lists six services, from lawn care to snow removal.",
+              "claim_ids": [
+                "C003"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "title": "A difference worth knowing",
+          "text": "Northfield Lawn Care offers 24-hour emergency snow clearing. The pages reviewed on this site do not mention emergency snow response.",
+          "claim_ids": [
+            "C011",
+            "C012"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "overview",
+      "title": "Business overview",
+      "blocks": [
+        {
+          "type": "facts",
+          "items": [
+            {
+              "label": "Serving homeowners since",
+              "value": "2009",
+              "claim_ids": [
+                "C002"
+              ]
+            },
+            {
+              "label": "Services listed",
+              "value": "6",
+              "claim_ids": [
+                "C003"
+              ]
+            },
+            {
+              "label": "Service area",
+              "value": "Greater Toronto Area",
+              "claim_ids": [
+                "C001"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Birch & Co. Landscaping serves homes across the Greater Toronto Area. The business states it has served homeowners since 2009.",
+          "claim_ids": [
+            "C001",
+            "C002"
+          ],
+          "lead": true
+        }
+      ]
+    },
+    {
+      "key": "offerings",
+      "title": "Services and offerings",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The site lists six services: lawn care, garden design, seasonal clean-ups, snow removal, tree care and irrigation.",
+          "claim_ids": [
+            "C003"
+          ]
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Service",
+            "What the site says"
+          ],
+          "rows": [
+            [
+              {
+                "text": "Snow removal",
+                "claim_ids": [
+                  "C004"
+                ]
+              },
+              {
+                "text": "Offered as seasonal contracts for homes.",
+                "claim_ids": [
+                  "C004"
+                ]
+              }
+            ],
+            [
+              {
+                "text": "Garden design",
+                "claim_ids": [
+                  "C005"
+                ]
+              },
+              {
+                "text": "Every project starts with a site visit.",
+                "claim_ids": [
+                  "C005"
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "key": "aspirations",
+      "title": "Stated aspirations and positioning",
+      "blocks": [
+        {
+          "type": "callout",
+          "title": "What the business says about itself",
+          "text": "The About page states a mission to create outdoor spaces that people can enjoy all year.",
+          "claim_ids": [
+            "C006"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "audiences",
+      "title": "Audiences the business addresses",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The 12 pages reviewed on this site do not mention commercial properties. Testimonials on the site mention reliability and tidy work.",
+          "claim_ids": [
+            "C007",
+            "C008"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "competitors",
+      "title": "Competitive landscape",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": [
+            "Business",
+            "Services listed on its own website"
+          ],
+          "rows": [
+            [
+              {
+                "text": "Birch & Co. Landscaping",
+                "claim_ids": [
+                  "C003"
+                ]
+              },
+              {
+                "text": "Six services including lawn care, garden design and snow removal.",
+                "claim_ids": [
+                  "C003"
+                ]
+              }
+            ],
+            [
+              {
+                "text": "Northfield Lawn Care",
+                "claim_ids": [
+                  "C009"
+                ]
+              },
+              {
+                "text": "Lawn care, snow removal and pest control.",
+                "claim_ids": [
+                  "C009"
+                ]
+              }
+            ],
+            [
+              {
+                "text": "GreenLeaf Outdoor",
+                "claim_ids": [
+                  "C010"
+                ]
+              },
+              {
+                "text": "Garden design, irrigation and tree care.",
+                "claim_ids": [
+                  "C010"
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "key": "standout",
+      "title": "Where the business stands out today",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Among the three businesses reviewed, Birch & Co. is the only one that lists both garden design and snow removal.",
+          "claim_ids": [
+            "C003",
+            "C009",
+            "C010"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "opportunities",
+      "title": "Opportunities",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Northfield Lawn Care offers 24-hour emergency snow clearing. The pages reviewed on this site do not mention emergency snow response. Describing any emergency service the business already provides would close that gap.",
+          "claim_ids": [
+            "C011",
+            "C012"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "content",
+      "title": "Content starter themes",
+      "blocks": [
+        {
+          "type": "bullets",
+          "items": [
+            {
+              "text": "How seasonal snow contracts work for homeowners",
+              "claim_ids": [
+                "C004"
+              ]
+            },
+            {
+              "text": "What happens during a garden design site visit",
+              "claim_ids": [
+                "C005"
+              ]
+            },
+            {
+              "text": "Making the most of outdoor space all year",
+              "claim_ids": [
+                "C006"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "actions",
+      "title": "Action points",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "lead": true,
+          "text": "Each action follows from a gap documented in this report.",
+          "claim_ids": [],
+          "structural": true
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Action",
+            "Why now",
+            "Evidence"
+          ],
+          "col_widths": [
+            170,
+            190,
+            120
+          ],
+          "rows": [
+            [
+              {
+                "text": "Add an emergency snow response section to the snow removal page if the service exists.",
+                "claim_ids": [
+                  "C011",
+                  "C012"
+                ]
+              },
+              {
+                "text": "A competitor lists 24-hour emergency clearing; the pages reviewed do not mention it.",
+                "claim_ids": [
+                  "C011",
+                  "C012"
+                ]
+              },
+              {
+                "text": "Competitor site, snow page",
+                "claim_ids": [
+                  "C011",
+                  "C012"
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "Q01",
+      "topic": "Goals and priorities",
+      "question": "What is the one outcome you want most from marketing in the next 12 months?",
+      "trigger": "No goals stated on the site",
+      "site_says": "Mission mentions year-round enjoyment only",
+      "priority": "must",
+      "claim_ids": [
+        "C006"
+      ]
+    },
+    {
+      "id": "Q02",
+      "topic": "Goals and priorities",
+      "question": "Which of the six services would you like more of?",
+      "trigger": "Six services with equal weight",
+      "site_says": "All services listed without priority",
+      "priority": "must",
+      "claim_ids": [
+        "C003"
+      ]
+    },
+    {
+      "id": "Q03",
+      "topic": "Customers and decision makers",
+      "question": "Do you want to win commercial contracts, or stay with homeowners?",
+      "trigger": "Pages reviewed do not mention commercial properties",
+      "site_says": "Only homes are mentioned",
+      "priority": "must",
+      "claim_ids": [
+        "C007",
+        "C013"
+      ]
+    },
+    {
+      "id": "Q04",
+      "topic": "Customers and decision makers",
+      "question": "What do people ask before they call, and what makes them hesitate?",
+      "trigger": "Testimonials only cover reliability and tidy work",
+      "site_says": "No FAQ on pricing or timing",
+      "priority": "nice",
+      "claim_ids": [
+        "C008"
+      ]
+    },
+    {
+      "id": "Q05",
+      "topic": "Offerings and pricing",
+      "question": "Do you offer emergency snow response, and do you want to promote it?",
+      "trigger": "A competitor lists 24-hour emergency clearing",
+      "site_says": "Not mentioned on the pages reviewed",
+      "priority": "must",
+      "claim_ids": [
+        "C011",
+        "C012"
+      ]
+    },
+    {
+      "id": "Q06",
+      "topic": "Offerings and pricing",
+      "question": "How many people work in the business today?",
+      "trigger": "A directory lists a team size that the site does not confirm",
+      "site_says": "Team size not stated",
+      "priority": "nice",
+      "claim_ids": [
+        "C014"
+      ]
+    },
+    {
+      "id": "Q07",
+      "topic": "Offerings and pricing",
+      "question": "In which year did the business start?",
+      "trigger": "A directory lists a different founding year",
+      "site_says": "Site states 2009",
+      "priority": "nice",
+      "claim_ids": [
+        "C015"
+      ]
+    },
+    {
+      "id": "Q08",
+      "topic": "Competitors they lose to",
+      "question": "Which two or three businesses do you lose quotes to?",
+      "trigger": "No competitors named by the client",
+      "site_says": "Not applicable",
+      "priority": "must",
+      "claim_ids": []
+    },
+    {
+      "id": "Q09",
+      "topic": "Marketing and measurement",
+      "question": "How do you track where leads come from, and what counts as a lead?",
+      "trigger": "No tracking visible from outside",
+      "site_says": "Contact form and phone number only",
+      "priority": "must",
+      "claim_ids": []
+    },
+    {
+      "id": "Q10",
+      "topic": "Constraints and topics to avoid",
+      "question": "Are there claims or topics we should never mention?",
+      "trigger": "Standard onboarding question",
+      "site_says": "Not applicable",
+      "priority": "nice",
+      "claim_ids": []
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://birchandco.example/about",
+      "title": "About",
+      "type": "client site",
+      "fetched": "2026-10-29"
+    },
+    {
+      "url": "https://birchandco.example/services",
+      "title": "Services",
+      "type": "client site",
+      "fetched": "2026-10-29"
+    },
+    {
+      "url": "https://birchandco.example/services/snow",
+      "title": "Snow removal",
+      "type": "client site",
+      "fetched": "2026-10-29"
+    },
+    {
+      "url": "https://birchandco.example/services/design",
+      "title": "Garden design",
+      "type": "client site",
+      "fetched": "2026-10-29"
+    },
+    {
+      "url": "https://birchandco.example/reviews",
+      "title": "Testimonials",
+      "type": "client site",
+      "fetched": "2026-10-29"
+    },
+    {
+      "url": "https://northfieldlawn.example/services",
+      "title": "Northfield services",
+      "type": "competitor site",
+      "fetched": "2026-10-29"
+    },
+    {
+      "url": "https://northfieldlawn.example/snow",
+      "title": "Northfield snow",
+      "type": "competitor site",
+      "fetched": "2026-10-29"
+    },
+    {
+      "url": "https://greenleaf.example/what-we-do",
+      "title": "GreenLeaf services",
+      "type": "competitor site",
+      "fetched": "2026-10-29"
+    }
+  ]
+}

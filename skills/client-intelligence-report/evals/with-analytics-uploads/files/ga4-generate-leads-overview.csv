@@ -1,0 +1,781 @@
+# ----------------------------------------
+# Generate leads overview
+# Account: danburitecorp
+# Property: danburitecorp.com - GA4
+# ----------------------------------------
+#  
+# Start date: 20260731
+# End date: 20261028
+Nth week,New users
+0001,1
+0002,1
+0004,2
+0005,3
+0007,0
+0010,4
+0011,1
+
+# Start date: 20260731
+# End date: 20261028
+Nth week,Returning users
+0001,0
+0002,1
+0004,0
+0005,0
+0007,1
+0010,1
+0011,0
+
+# Start date: 20260731
+# End date: 20261028
+Nth week,Qualified leads
+0001,0
+0002,0
+0004,0
+0005,0
+0007,0
+0010,0
+0011,0
+
+# Start date: 20260731
+# End date: 20261028
+Nth week,Converted leads
+0001,0
+0002,0
+0004,0
+0005,0
+0007,0
+0010,0
+0011,0
+
+#  
+# Start date: 20260731
+# End date: 20261028
+Platform,Key events
+
+
+#  
+# Start date: 20260731
+# End date: 20261028
+First user primary channel group (Default Channel Group),New users
+Direct,6
+Paid Search,4
+AI Assistant,1
+Paid Other,1
+
+# How well do you retain your users?
+# Start date: 20260913
+# End date: 20261024
+Date,Week 0,Week 1,Week 2,Week 3,Week 4,Week 5
+Sep 13 - Sep 19,0,0,0,0,0,0
+Sep 20 - Sep 26,0,0,0,0,0,-1
+Sep 27 - Oct 3,0,0,0,0,-1,-1
+Oct 4 - Oct 10,4,0,0,-1,-1,-1
+Oct 11 - Oct 17,1,0,-1,-1,-1,-1
+Oct 18 - Oct 24,0,-1,-1,-1,-1,-1
+
+#  
+# Start date: 20260731
+# End date: 20261028
+Audience name,Active users
+All Users,13
+Landing page audience,13
+
+#  
+# Start date: 20260731
+# End date: 20261028
+City,Active users
+Singapore,2
+Avadi,1
+Dubai,1
+Malaga,1
+Mansfield,1
+Paris,1
+Riyadh,1
+Rome,1
+Tehran,1
+Tirunelveli,1
+Tiruvannamalai,1
+
+#  
+# Start date: 20260731
+# End date: 20261028
+Landing page + query string,Organic Google Search impressions
+/blog/all-you-should-know-about-business-setup-in-dubai-and-company-setup-in-uae,38934
+/blog/list-of-20-best-profitable-small-business-opportunities-in-dubai,31662
+/blog/how-to-get-police-clearance-certificate-in-uae,30617
+/blog/what-are-the-top-6-easy-ways-for-company-formation-in-dubai,24453
+/free-zone-company-setup-dubai,14510
+/blog/what-are-pro-services-in-dubai,14430
+/blog/company-registration-process-in-dubai,12295
+/blog/getting-passport-and-visa-for-your-baby-in-uae,11890
+/blog/cheapest-business-setup-idea-in-dubai,10690
+/uae-offshore-company-formation,10534
+/company-registration-in-dubai,9816
+/blog/what-is-the-cost-of-an-employment-visa-in-uae,9467
+/blog/types-of-trade-licenses-in-dubai-uae,9332
+/private-banking-in-dubai,8392
+/blog/cloud-kitchen-in-dubai,8324
+/blog/what-is-the-cost-of-setting-up-a-company-in-dubai-business-setup-toolkit,8095
+/blog/pro-services-in-dubai-uae,7450
+/blog/planning-to-start-a-business-find-out-the-cheapest-free-zone-license-in-the-uae,7224
+/blog/the-step-by-step-process-to-issue-your-new-instant-ded-license,6829
+/blog/how-much-does-it-really-cost-to-set-up-a-business-in-dubai,6656
+/corporate-tax-registration-uae,6652
+/blog/how-to-setup-a-company-in-dmcc-freezone,5445
+/blog/liquidation-procedure-of-companies-in-dubai,5350
+/blog/best-home-based-business-ideas-in-dubai,5085
+/vat-services,4902
+/business-setup-in-abu-dhabi,4892
+/blog/how-to-open-an-emirates-nbd-business-account-as-a-non-resident-in-uae,4039
+/blog/a-step-by-step-guide-to-procure-your-free-zone-visa-in-uae,4001
+/golden-visa,3855
+/blog/top-booming-business-in-uae,3839
+/rak-offshore,3760
+/blog/register-a-company-in-dubai-business-formation-in-uae,3742
+/blog/how-to-open-a-bank-account-in-dubai,3597
+/blog/how-to-set-up-a-business-in-dubai-a-simple-guide,3541
+/blog/what-are-the-key-8-legal-steps-to-setup-business-in-dubai,3469
+/mainland-company-setup-uae,3361
+/saif-zone,3127
+/blog/ultimate-guide-to-company-registration-in-dubai,3090
+/company-branches,3028
+/ajman-free-zone-company-setup,2849
+/blog/vat-invoice-requirements-in-the-uae-guide,2810
+/business-setup-dubai,2668
+/blog/free-zone-company-setup-and-services-in-dubai,2660
+/non-resident-bank-account,2635
+/blog/ajman-offshore-company-formation,2622
+/blog/winding-up-a-company-in-uae,2533
+/blog/dubai-mainland-companies,2495
+/blog/company-setup-in-sharjah-airport-free-zone-at-affordable-costs,2422
+/blog/what-are-the-types-of-business-entities-currently-operating-in-dubai,2408
+/blog/start-a-business-in-the-uae-complete-guide-to-business-setup-in-uae,2400
+/company-liquidation-uae,2387
+/blog/rak-dao-digital-assets-free-zone,2363
+/blog/how-to-obtain-a-trade-license-in-dubai-business-setup-toolkit,2355
+/abu-dhabi-global-market-business-setup,2235
+/blog/business-setup-consultants-in-dubai-complete-guide-to-company-formation-in-uae,2214
+/blog/free-zone-company-formation-process-in-uae,2203
+/blog/the-best-pro-service-in-dubai,2190
+/jebel-ali-free-zone-company-setup,2178
+/industrial-company-setup,2030
+/dubai-offshore,1964
+/,1925
+/blog/the-cost-to-set-up-a-manufacturing-company-in-dubai,1921
+/legal-advisory,1905
+/blog/the-ultimate-guide-to-start-a-limited-liability-company-llc-in-dubai,1898
+/blog/what-is-the-procedure-to-set-up-a-limited-liability-company-in-dubai,1895
+/blog/dubai-business-setup-ded-and-approvals,1892
+/blog/pro-services-dubai-business-setup,1870
+/blog/difference-between-a-limited-liability-company-and-an-llc-in-dubai,1770
+/blog/shams-free-zone-summer-promotions,1747
+/business-setup-in-ajman,1741
+/blog/ajman-free-zone-company-setup,1695
+/blog/affordable-and-low-cost-offshore-business-setup-in-uae,1669
+/business-setup-in-dubai,1629
+/bank-account-solution,1624
+/blog/how-to-get-a-general-trading-license-in-dubai,1529
+/blog/how-to-start-a-business-in-a-dubai-free-zone,1529
+/blog/top-business-setup-consultants-in-dubai-evaluate-your-options,1510
+/blog/all-you-want-to-know-about-free-zone-visa-cost-in-dubai,1380
+/blog/sharjah-cost-of-license-dubai-company-set-up-cost,1367
+/blog/free-zone-visa-in-dubai-rules-and-regulations,1365
+/company-setup-in-sharjah,1333
+/rep-office-of-foreign-company,1323
+/limited-liability-company,1298
+/blog/bank-account-for-free-zone-company-and-its-requirements,1294
+/blog/property-visa-in-dubai,1278
+/blog/twenty-freezones-are-exempted-from-tax,1261
+/business-setup-in-fujairah,1237
+/blog/company-legal-roles-in-uae-business-structures,1224
+/abu-dhabi-free-zone,1185
+/tax-audit,1181
+/blog/business-setup-service-in-dubai-get-your-business-established-easily,1167
+/business-setup-in-rak-freezone,1165
+/blog/business-setup-in-dubai-guide-to-starting-your-business,1138
+/blog/how-to-register-a-business-in-dubai-as-a-foreigner,1128
+/blog/business-setup-in-oman-danburite-corporate-dubai,1124
+/blog/accounting-companies-in-dubai-expert-bookkeeping-and-financial-accounting-services,1121
+/blog/pro-services-visa-extension-and-family-visa-services-in-dubai,1086
+/blog/set-up-an-ajman-offshore-company-formation-with-simple-steps,1080
+/corporate-finance-advisory,1074
+/dubai-airport-freezone,1070
+/blog/how-to-apply-for-a-golden-visa-in-the-uae,1065
+/blog/top-6-ways-to-get-residence-and-free-zone-visa-in-the-uae,1065
+/accounting-services-uae,1050
+/blog/how-company-formation-consultants-in-uae-help-start-your-business,1050
+/abu-dhabi-airport-freezone,1044
+/blog/documents-required-for-offshore-company-registration-in-dubai,1039
+/blog/foreign-ownership-in-uae-business-setup,1012
+/blog/company-setup-in-shams-free-zone,1010
+/ifza-dubai-free-zone-company-setup,1010
+/blog/offshore-company-bank-account-requirements,996
+/digital-accounts,989
+/blog/uae-major-free-zone-companies,972
+/blog/uae-major-offshore-companies,968
+/masdar-city-free-zone,961
+/blog/why-entrepreneurs-should-consider-ajman-free-zone-for-their-business,948
+/blog/uae-anti-money-laundering-policy-compliance,938
+/blog/common-vat-mistakes-in-uae-businesses-and-how-to-avoid-penalties,855
+/blog/how-to-get-funding-for-your-business-in-uae,850
+/blog/how-to-file-vat-return-in-uae,839
+/dmcc-business-hub,839
+/hamriyah-free-zone-hfza,836
+/blog/how-to-setup-a-joint-venture-company-in-dubai,814
+/shamz,756
+/blog/public-relation,751
+/blog/e-channel-immigration-system-and-its-benefit,739
+/blog/how-to-transfer-your-uae-employment-visa-to-a-business-visa,730
+/blog/vat-deregistration-in-uae-deadline-process-penalty-guide,730
+/about-us,726
+/blog/why-does-everyone-want-to-start-a-business-in-dubai,723
+/blog/legal-consultancy-services-in-dubai-offers-the-guidance-of-your-all-matters,711
+/dubai-media-city-business-setup,710
+/blog/uae-foundations-protect-your-wealth-plan-your-legacy,708
+/blog/complete-guide-to-setting-up-a-dubai-mainland-company,695
+/khalifa-industrial-zone,687
+/aml-services-in-uae,669
+/blog/import-and-export-business-opportunities-in-dubai,658
+/blog/company-formation-consultant-in-dubai,651
+/blog/what-does-a-golden-visa-mean,646
+/bookkeeping-services,640
+/contact-us,634
+/foreign-company-branch,627
+/blog/how-to-start-a-gold-trading-business-in-dubai-guide,617
+/blog/what-is-dropshipping-and-how-to-start-a-dropshipping-company-in-dubai,616
+/dubai-design-district-business-setup,608
+/blog/what-happens-if-you-dont-close-the-companies,606
+/blog/esr-notification-in-uae,602
+/blog/all-you-should-know-before-forming-a-general-partnership-company-in-dubai,585
+/meydan-free-zone,581
+/blog/office-space-for-company-registration-in-dubai,578
+/dubai-silicon-oasis,574
+/services,573
+/blog/uae-corporate-laws-overview,569
+/sole-establishment,564
+/blog/complete-guide-to-vat-services-in-dubai,560
+/blog/vat-registration-in-uae,540
+/blog/involuntary-loss-of-employment-scheme,539
+/blog/ecommerce-in-dubai,525
+/ajman-offshore,520
+/blog/business-setup-in-qatar,516
+/blog/formalities-for-setting-up-a-restaurant-in-dubai,493
+/rakez-free-zone,492
+/blog/how-to-set-up-an-e-commerce-business-in-uae-free-zone,486
+/blog/benefits-of-pro-services-for-your-company,483
+/blog/introducing-corporate-tax,480
+/dubai-maritime-city,475
+/dubai-world-trade-centre,469
+/blog/free-zone-company-liquidation-formalities,464
+/free-zone-business-setup-uae,460
+/blog/how-to-set-up-a-limited-partnership-company-in-dubai,457
+/fujairah-creative-city,456
+/blog/tips-to-hire-a-legal-consultancy-services-in-dubai,448
+/company-formation-in-dubai-mainland,438
+/dubai-south,429
+/blog/anti-money-laundering-guidelines-dnfbps-uae,421
+/um-al-quwain-free-zone,421
+/professional-company,411
+/blog/dubai-free-zone-business-setup-how-to-start-a-company-in-dafza,408
+/uae-free-zone,407
+/d-tech-free-zone,405
+/blog/operate-your-company-remotely-from-anywhere,404
+/blog/sole-proprietorship-company-formation-in-dubai,404
+/blog/set-up-a-business-in-dubai-if-you-already-on-uae-employment-visa,402
+/blog/scope-of-pro-services-and-how-they-are-benefical-for-your-company,397
+/blog/professional-company-formation-in-uae,396
+/e-invoicing-services-in-dubai,396
+/dubai-international-financial-centre,393
+/blog/business-setup-in-dubai-top-business-ideas-complete-setup-guide,391
+/blog/how-to-obtain-a-uae-free-zone-visa,390
+/blog/the-mainland-shift-turning-point-for-free-zone-companies,389
+/blog/retainer-services-for-companies-in-dubai-uae,384
+/pro-services,378
+/blog/free-zone-company-formation-in-uae-process-costs,375
+/blog/unlocking-a-golden-future-with-the-uae-golden-visa,373
+/blog/starting-a-business-in-dubai-with-minimum-investment-what-actually-possible,371
+/blog/corporate-tax-and-vat-applicability-for-offshore-companies-in-uae,369
+/blog/healthcare-business-setup-in-dubai-what-you-need-to-know-before-you-start,359
+/blog/why-uae-banks-reject-business-account-application-how-to-avoid-it,356
+/dubai-healthcare-city,351
+/blog/how-to-set-up-an-investment-company-in-dubai-complete-guide-for-investors,350
+/dubai-knowledge-park,339
+/blog/document-clearance-services-in-dubai,337
+/blog/know-how-freezone-company-formation-in-dubai-offers-many-services,335
+/vat-deregistration-services-in-uae,333
+/blog/anti-money-laundering-regulations-in-uae,326
+/blog/company-liquidation-in-uae-cost-timeline-key-considerations,324
+/blog/understanding-dubai-green-visa,317
+/blog/complete-guide-to-corporate-tax-registration-in-uae-process-deadlines,313
+/tax-consultancy-services-uae,308
+/e-invoicing-services-for-free-zone-companies,307
+/blog/freelance-permit-in-uae,304
+/limited-partnership-lp,304
+/blog/profitable-businesses-to-open-in-dubai,302
+/blog/reliable-local-sponsor-for-business-in-dubai,280
+/company-setup-services,278
+/blog/top-10-fastest-growing-business-sectors-and-leading-industries-in-the-uae,275
+/blog/9-key-things-you-should-keep-in-mind-before-setting-up-a-business-in-dubai,274
+/blog/ubo-in-the-uae-what-every-business-owner-must-know,272
+/blog/corporate-tax-return-uae-deadlines-penalties-guide,271
+/blog/what-are-the-documents-i-need-to-obtain-a-professional-license-in-the-uae,266
+/blog/nominee-shareholder-services-in-dubai,265
+/blog/dubai-retirement-visa-guide-luxury-living,261
+/blog/uae-e-invoicing-deadlines-what-the-threshold-means-for-your-business,260
+/ipr-advisory,259
+/blog/understanding-anti-money-laundering-in-uae,257
+/blog/what-is-the-procedure-for-starting-a-public-shareholding-company-in-dubai,256
+/blog/tally-zoho-books-quickbooks-accounting-software-best-for-dubai-smes,250
+/fujairah-free-zone,247
+/blog/the-cost-of-trade-mark-registration-in-uae,245
+/blog/business-setup-in-fujairah-free-zone-vs-mainland-complete-guide,243
+/blog/vat-on-life-insurance-and-reinsurance-in-uae-what-the-fta-directive-clarifies,237
+/blog/uae-anti-money-laundering-framework,236
+/business-setup-in-qatar,223
+/blog/uae-national-register-carbon-credits,215
+/blog/internal-audit-vs-external-audit-in-uae-key-differences-requirements,213
+/personal-bank-account,213
+/e-invoicing-for-hospitality-businesses,208
+/blog/dubai-business-setup-for-women-the-practical-guide-to-getting-started,203
+/blog/foreign-investors-business-setup-consultant-in-dubai,195
+/business-setup-in-uae,192
+/blog/corporate-tax-small-business-relief-uae,190
+/civil-company,186
+/blog/rakez-vs-rak-mainland-which-business-setup-is-right-for-you,171
+/blog/discover-key-info-about-the-tailored-golden-visa-for-artistic-individuals-like-you,167
+/blog/how-crowdfunding-helps-sme,166
+/blog/e-invoicing-in-uae-explained-everything-smes-need-to-know,163
+/blog/pro-services-in-the-uae,163
+/blog/uae-extends-small-business-relief-for-corporate-tax,159
+/blog/why-business-consultancy-in-dubai-is-essential-for-business-setup-in-uae,156
+/blog/post-company-formation-in-dubai-what-you-re-legally-required-to-do-next,155
+/blog/input-tax-credit-in-uae-vat-how-to-claim-it-and-what-gets-blocked,154
+/blog/essential-legal-documents-every-dubai-business-must-keep-after-setup,150
+/blog/business-setup-service-in-dubai,148
+/khalifa-port-free-trade-zone,148
+/blog/getting-a-10-year-golden-visa-with-an-aed-30-000-salary,147
+/blog/uae-golden-visa-investors-business-capital-bank-deposit,147
+/blog/reasons-why-should-outsource-a-pro-service-company-in-dubai,145
+/blog/secretarial-services-for-offshore-company,136
+/blog/why-pdf-invoice-is-not-e-invoice-what-uae-businesses-need-to-know,134
+/blog/sharjah-free-zone-business-setup-step-by-step-company-formation-guide,133
+/blog/uae-tourist-vat-refund-bank-card-processing-exchange,131
+/blogs,129
+/blog/bookkeeping-vs-accounting-in-uae-what-is-the-difference,128
+/blog/what-is-the-best-business-to-invest-in-dubai,128
+/blog/green-visa-for-work-in-uae,127
+/business-setup-in-oman,125
+/blog/business-setup-services-uae-danburite-corporate,122
+/blog/foreign-ownership-in-uae-things-investors-get-wrong,122
+/duqe-free-zone-business-setup,120
+/blog/how-pro-services-work-in-dubai-step-by-step-process-explained,118
+/blog/how-to-start-a-private-shareholding-company-in-dubai-free-zone,117
+/blog/uae-vat-public-clarification-tax-recovery-for-concerned-goods,117
+/blog/how-to-choose-the-best-legal-advisory-services-in-dubai,116
+/blog/profitable-business-in-dubai-ideas-to-consider-for-your-first-venture,116
+/blog/company-setup-in-dubai-ultimate-business-setup-guide-for-startups,112
+/blog/uae-business-bank-account-rejected-causes-solutions-next-steps,112
+/blog/company-formation-in-qatar-complete-guide-to-business-registration,109
+/blog/the-role-of-corporate-service-providers,108
+/blog/dubai-business-setup-made-affordable-reduced-service-fees,107
+/blog/audit-services-in-dubai-how-to-choose-the-right-audit-firm,105
+/blog/designated-zones-under-uae-vat-rules-and-treatment-explained,104
+/blog/how-to-get-golden-visa-uae,104
+/blog/how-to-correct-your-vat-returns-in-uae,100
+/blog/golden-visa-services-in-dubai-cost-application-process-documentation-expert-consultants-explained,98
+/blog/setting-up-a-branch-of-foreign-company-in-dubai,97
+/blog/vat-registration-uae-in-2021-a-step-by-step-guide,97
+/blog/comprehensive-guide-to-company-de-registration-for-businesses-in-mainland-uae,95
+/blog/the-best-offshore-jurisdiction-in-uae,95
+/blog/what-makes-the-best-accounting-services-in-uae-the-right-choice-for-businesses,92
+/blog/hundred-percent-ownership-for-foreign-investors,91
+/blogs/category/uae-business-setup,89
+/blog/expanding-an-existing-business-into-dubai-market-entry-strategies-legal-options,87
+/blog/uae-growth-innovation-business-ideas-with-maximum-roi,87
+/blog/key-things-to-consider-before-moving-from-freezone-company-to-uae-mainland,86
+/blog/uae-financial-year-business-guide-to-vat-corporate-tax-filings,86
+/other-corporate-services,86
+/blog/uae-corporate-tax-compliance-checklist-a-practical-guide-for-businesses,85
+/blog/bookkeeping-requirements-for-uae-businesses-what-every-company-must-know,84
+/blog/vat-refund-on-new-home-construction-guide-for-uae-nationals,83
+/blog/northern-emirate-free-zone-comparison,82
+/e-invoicing-for-government-contractors-in-uae,80
+/llc-company-setup,80
+/blog/in-house-pro-vs-outsourced-pro-services,79
+/blog/understanding-article-25-market-value-under-uae-vat-latest-fta-update,78
+/blog/foreign-source-income-uae-corporate-tax-taxable-exempt,77
+/blog/obtain-great-tax-benefits-with-the-uae-free-zone-company-formation,77
+/vat-return-filing-services,77
+/blog/federal-decree-law-ninteen,74
+/blog/dubai-media-city-company-setup,73
+/blog/the-impact-of-blockchain-system-in-dubai,71
+/blog/how-to-renew-a-free-zone-trade-license-in-uae-step-by-step-guide,67
+/blog/uae-corporate-tax-penalties-how-businesses-can-avoid-fines,67
+/blog/changing-uae-free-zone-business-activity-after-company-formation-guide,65
+/blog/vat-treatment-in-free-zone-and-mainland-transactions,65
+/privacy-policy,64
+/blog/mainland-freezone-or-offshore-which-one-is-the-better-choice-for-your-business,62
+/blog/employment-insurance-in-uae,58
+/blog/getting-a-10-year-uae-golden-visa-for-a-property-investment-in-dubai,58
+/blog/company-setup-in-dubai-freezones,57
+/blog/how-to-protect-a-business-in-dubai,57
+/blog/why-do-businesses-need-vat-return-filing-services-in-uae,56
+/blog/ajman-free-zone-pioneer-package,55
+/blog/corporate-tax-for-free-zone-companies-in-uae-exempt,55
+/blog/what-to-know-about-bank-account-opening-in-uae,55
+/cookies-settings,55
+/blog/audit-checklist-for-uae-businesses-what-to-prepare-before-an-audit,54
+/blog/why-danuburite-corporate-is-one-of-the-leading-names-for-business-set-up-in-dubai,54
+/blog/advantages-of-setting-up-an-offshore-in-uae,53
+/blog/questions-founders-always-ask-about-dubai-business-setup,53
+/blog/how-uae-businesses-can-prepare-for-company-expansion-into-another-emirate,52
+/blog/top-5-reasons-why-dubai-is-an-international-convention-and-exhibition-centre,50
+/blog/dubai-free-zone-registration-step-by-step-from-application-to-bank-account,49
+/blog/ajman-free-zone-for-smes-a-quick-guide,48
+/blog/uae-e-invoicing-10-questions-businesses-need-to-answer,47
+/blog/best-business-to-start-in-dubai,46
+/blog/what-happens-after-a-uae-audit-is-completed-the-follow-up-steps,46
+/blog/business-opportunities-in-dubai-2022-and-cheapest-business-setup-in-uae,44
+/blog/empowering-women-entrepreneurs-the-rise-of-female-led-businesses-in-the-uae,44
+/blog/major-benefits-of-ajman-free-zone-company-setup,44
+/blog/trade-license-renewal-in-dubai,44
+/blog/tourist-vat-refund-scheme-uae-a-guide-for-vat-registered-retailers,43
+/blog/vat-and-corporate-tax-for-e-commerce-businesses-in-the-uae-a-practical-guide,43
+/blog/which-uae-free-zone-is-right-for-you-complete-guide,42
+/blog/oman-company-setup-what-every-entrepreneur-needs-to-know,41
+/blog/residence-visa-pro-services,41
+/blog/offshore-company-bank-acount-in-dubai,40
+/blog/preparing-your-business-for-audit-what-uae-accountants-look-for,37
+/blog/a-complete-guide-to-free-zone-services-in-abu-dhabi,36
+/author/nikhil-skariah/1,35
+/blog/business-setup-in-dubai-uae-how-safe-is-your-investment-during-global-conflicts,35
+/blog/llc-and-free-zone-company-liquidation-in-dubai,34
+/blog/danburite-corporate-your-one-stop-shop,33
+/blog/how-to-qualify-for-business-restructuring-relief-under-uae-corporate-tax2026,33
+/blog/professional-business-setup-consultants-make-dubai-free-zone-registration-easier,33
+/blog/business-setup-in-rak-freezone,32
+/blog/how-to-maintain-business-continuity-when-expanding-into-the-uae,31
+/sharjah-free-zone,31
+/blog/company-setup-mistakes-that-cost-uae-business-owners,30
+/blog/how-to-claim-uae-corporate-tax-late-registration-penalty-waiver,30
+/blog/legal-consultancy-services-in-dubai-to-handle-all-situations-related-to-your-businesses,29
+/blog/esg-in-uae-business-setup-what-happens-after-company-formation,28
+/blog/top-company-formation-mistakes-in-uae-and-how-to-avoid-them,28
+/blog/accounting-company-in-dubai-how-to-choose-the-right-firm-for-your-business,27
+/blog/month-end-close-for-uae-businesses-step-by-step-process-common-mistakes,25
+/blog/clear-bookkeeping-backlog-before-tax-and-audit-in-uae,24
+/payment-terms-and-conditions,23
+/blog/common-legal-mistakes-entrepreneurs-make-during-uae-company-formation,22
+/blog/why-you-need-business-setup-consultant-in-dubai-for-company-formation,22
+/blog/get-the-right-ajman-free-zone-business-setup-options-now,21
+/blog/business-tax-registration-dubai-business,20
+/blog/how-business-consultancy-in-dubai-can-reduce-company-setup-delays,20
+/blog/uae-penalties-what-every-business-must-do-before-the-deadline,20
+/blog/why-set-up-a-business-in-oman-key-benefits-opportunities-considerations,20
+/reviewer/divya-r-nair/6,20
+/blog/business-setup-dubai-mainland-free-zone-offshore-company-formation,19
+/blog/legal-consultancy-services,19
+/blog/why-uae-national-vat-refund-claims-get-rejected-how-to-avoid-it,19
+/terms-and-conditions,19
+/blog/business-setup-consultants-in-dubai-how-to-choose-the-best-services-for-your-company,18
+/blog/mainland-vs-free-zone-choosing-company-formation-services-in-uae,18
+/blog/uae-e-invoicing-vat-tax-filing-input-recovery-and-audit-risk,18
+/reviewer/shibi-joseph/7,18
+/blog/how-accurate-financial-records-help-businesses-detect-financial-crime,17
+/blog/how-to-set-up-your-business-costs-explained-what-no-one-tells-you,17
+/blog/the-ultimate-guide-to-obtaining-e-commerce-license-in-uae,17
+/blog/why-proper-accounting-is-crucial-for-businesses-in-the-uae,17
+/blog/why-proper-bookkeeping-is-important-for-uae-businesses,17
+/blog/common-accounting-mistakes-uae-small-businesses-make,16
+/blog/financial-statement-reconciliation-how-to-fix-accounting-issues,16
+/blog/uae-e-invoicing-for-businesses-complete-guide,16
+/blog/uae-free-zone-business-setup-guide-benefits-and-updates,16
+/blogs/category/free-zone,15
+/blog/ultimate-document-checklist-for-starting-a-business-in-uae,14
+/blog/accounting-income-in-uae-corporate-tax-why-it-differs,13
+/blog/how-to-choose-the-right-free-zone-in-sharjah-for-your-business,13
+/blog/mainland-vs-free-zone-vat-de-registration-in-uae-what-to-know,13
+/blogs?page=3,13
+/blogs/category/company-formation,12
+/blog/your-checklist-for-choosing-the-right-accounting-services-in-uae,11
+/blog/client-centric-solutions-personalized-services,10
+/blog/free-zone-vs-mainland-dubai-which-company-structure-prevails,10
+/blog/get-the-easiest-process-of-company-registration-in-dubai-now,10
+/blog/start-the-best-offshore-company-formation-dubai,10
+/blog/step-by-step-guide-on-starting-a-company-in-dubai-mainland,10
+/blog/uae-business-setup-rules-regulations-a-complete-guide,10
+/blogs?page=9,10
+/reviewer/gessika-s-/5,10
+/blog/business-setup-in-qatar-your-gateway-to-success,9
+/blog/corporate-bank-accounts-in-the-uae-complicated-or-straightforward,9
+/blog/top-benefits-of-bookkeeping-services-in-uae,9
+/blog/common-audit-mistakes-businesses-make-in-dubai-and-how-to-avoid-them,8
+/blog/corporate-tax-registration-in-uae-step-by-step-guide-for-businesses,8
+/blog/danburite-corporate-checklist,8
+/blog/how-to-open-a-business-bank-account-in-dubai,8
+/blog/uae-corporate-tax-compliance-challenges-key-issues-businesses-must-fix,8
+/blog/why-entrepreneurs-are-choosing-uae-to-start-their-business,8
+/blog/choosing-an-auditor-in-dubai-key-factors-businesses-should-consider,7
+/blog/growing-top-10-new-business-ideas-in-dubai,7
+/blog/how-to-choose-the-right-business-activity-for-your-uae-license,7
+/blog/impact-of-vat-implementation-in-uae,7
+/blog/ultimate-guide-to-free-zones-in-dubai,7
+/blog/company-formation-services-in-uae-steps-documents,6
+/blog/fta-introduces-vat-calculator,6
+/blog/how-to-ecommerce-your-ultimate-guide-for-creating-your-very-own-ecommerce-empire,6
+/blog/mainland-company-setup-dubai-everything-you-need-to-start-your-business,6
+/blog/role-of-auditors-in-dubai-for-business-growth-and-success,6
+/blog/step-by-step-guide-to-setting-up-a-business-in-shams-free-zone,6
+/blogs?page=14,6
+/blogs?page=4,6
+/blog/business-recent-trends-and-investment-opportunities-in-uae,5
+/blog/dubai-digital-first-regulatory-environment-what-it-means-for-businesses,5
+/blog/formalities-to-get-greencard-citizenship-in-united-states-of-america,5
+/blog/most-suitable-fast-pro-service-in-dubai,5
+/blogs/category/tax-accounting-finance,5
+/blogs/category/uae-business-setup?page=3,5
+/blog/reasons-right-time-for-startups-entrepreneurs-to-set-up-business-in-dubai,4
+/blog/tax-consultants-in-uae-what-they-do-and-how-they-help-businesses,4
+/blog/uae-e-invoicing-update-what-businesses-must-prepare-before-july,4
+/blogs/category/company-setup,4
+/blogs/category/uae-business-setup?page=2,4
+/blog/european-citizenship-for-you-and-family,3
+/blog/how-vat-affects-the-uae-companies,3
+/blog/opening-a-business-bank-account-in-dubai,3
+/blog/the-role-of-audit-in-uae-business-compliance,3
+/blogs/category/business-strategies,3
+/reviewer/naeem/4,3
+/author/askar-ali-sheik/2,2
+/blog/major-advantages-for-company-formation-service-in-dubai,2
+/blogs/category/ajman,2
+/blogs/category/bank-account,2
+/blogs/category/company-liquidation,2
+/blogs/category/pro,2
+/blogs/category/uae-business-setup?page=4,2
+/blogs/category/uae-legalities,2
+/blogs?page=16,2
+/blog/free-zone-company-set-up-in-dubai,1
+/blog/how-do-free-zones-help-in-setting-up-a-business-in-dubai,1
+/blog/set-up-in-dubai-if-you-already-on-uae-employment-visa,1
+/blogs/category/audit,1
+/blogs/category/business-ideas,1
+/blogs/category/ecommerce-license,1
+/blogs/category/golden-visa,1
+/blogs/category/sharjah,1
+/blogs/category/trade-license,1
+/blogs/category/uae-offshore,1
+/blogs?page=12,1
+/blogs?page=2,1
+/blogs?page=5,1
+
+#  
+# Start date: 20260731
+# End date: 20261028
+Organic Google Search query,Organic Google Search clicks
+danburite corporate,50
+danburite corporate services,36
+business setup in dubai,29
+danburite,12
+police clearance certificate,10
+vat services in dubai,10
+cloud kitchen dubai rent price,8
+company registration in dubai,8
+business setup in qatar,6
+business setup in uae,5
+free zone business setup in uae,5
+police clearance certificate uae online,5
+pro services in dubai,5
+business setup in oman,4
+company formation in uae,4
+dafza business setup,4
+emirates nbd non resident account,4
+ajman offshore company setup,3
+anti money laundering regulations,3
+oman business setup,3
+police clearance certificate abu dhabi,3
+top 10 small business ideas in dubai,3
+ajman free zone company setup,2
+business set up in rak,2
+business setup dubai,2
+business setup in dubai free zone,2
+business setup in fujairah,2
+cheapest company setup in uae,2
+cheapest free zone license in uae,2
+cloud kitchen dubai,2
+cloud kitchen for rent in dubai,2
+cloud kitchen in dubai,2
+companies in oud metha dubai,2
+company formation in dubai,2
+company liquidation in uae,2
+company registration services in dubai,2
+company setup in dubai,2
+danubrite,2
+dubai company registration,2
+free zone company formation,2
+how much is abu dhabi police clearance,2
+list of small business in dubai,2
+nbd non resident account,2
+oman company setup,2
+pro services in uae,2
+small companies in dubai,2
+uae police clearance certificate,2
+vat deregistration in dubai,2
+vat services in uae,2
+what is the most profitable business in dubai,2
+abu dhabi,1
+abu dhabi global market (adgm),1
+abu dhabi pcc cost,1
+abu dhabi police clearance,1
+abu dhabi police clearance certificate,1
+accounting company in dubai,1
+ajman free zone visa,1
+anti-money laundering uae,1
+apply for a police clearance certificate,1
+apply for passport for my child,1
+bank account opening consultants in dubai,1
+bank account opening in dubai,1
+best business idea from home,1
+best business ideas in uae,1
+best business to start in dubai,1
+best online business in uae,1
+best small business to start in uae,1
+best small scale business in uae,1
+buisness in dubai,1
+business companies in uae,1
+business ideas in dubai,1
+business ideas in uae,1
+business in dubai,1
+business in dubai with low investment,1
+business in the uae,1
+business in uae with less investment,1
+business opportunities dubai,1
+business opportunity in dubai,1
+business opportunity in uae,1
+business set up,1
+business set up dubai,1
+business setup,1
+business setup companies in dubai,1
+business setup consultants in qatar,1
+business setup in dubai cost,1
+business setup qatar,1
+business setup service in fujairah,1
+cheapest free zone in dubai,1
+cheapest free zone license in dubai,1
+cheapest free zone uae,1
+cloud kitchen cost in dubai,1
+cloud kitchen for rent,1
+cloud kitchen rent,1
+cloud kitchen rental cost,1
+cloud kitchen rental dubai,1
+cloud kitchens dubai,1
+company formation company,1
+company formation consultants in uae,1
+company formation in ajman offshore,1
+company formation in fujairah,1
+company formation in oman,1
+company formation in umm al quwain,1
+company liquidation dubai,1
+company liquidation services in dubai,1
+company liquidation services in uae,1
+company setup in sharjah free zone,1
+corporate pro services in dubai,1
+corporate services provider in uae,1
+corporate tax registration in dubai,1
+daburite,1
+dandurite,1
+ded,1
+dmcc company formation,1
+dmcc company set up,1
+dubai company registration cost,1
+dubai media city business setup,1
+dubai silicon oasis company formation,1
+dubai top 10 companies list,1
+emirates setup dubai,1
+enbd non resident account,1
+free zone company setup dubai,1
+fujairah free zone company setup,1
+fz llc,1
+golden visa service dubai,1
+golden visa service in dubai,1
+good business in dubai,1
+home based jobs in dubai,1
+home business,1
+how long does it take to get a baby passport,1
+how long it takes for police clearance certificate,1
+how long it takes to get a police clearance certificate,1
+how much is the police clearance in uae,1
+how to get passport for kids,1
+ifza free zone company formation in dubai,1
+instant license ded,1
+is dubai good for business,1
+kitchen rental dubai,1
+legal advisory services in dubai,1
+limited liability company formation in uae,1
+limited liability company in uae,1
+liquidation report uae cost,1
+liquidation services in dubai,1
+list of pro services in dubai,1
+low-cost business setup in dubai,1
+mainland company formation in uae,1
+mainland company setup dubai,1
+mainland company setup in uae,1
+ministry of interior police clearance,1
+moi police clearance certificate,1
+moi uae police clearance,1
+moi uae police clearance certificate,1
+non resident account emirates nbd,1
+offshore company formation,1
+oman business,1
+oman business setup cost,1
+oman business setup services,1
+owner name,1
+partnership companies,1
+pcc certificate fees,1
+police clearance certificate price,1
+police clearance certificate uae online price,1
+police clearance moi,1
+pro service company,1
+pro services dubai,1
+pro services sharjah,1
+rak dao,1
+rak dao dubai,1
+rent cloud kitchen dubai,1
+saif zone business setup,1
+saif zone company formation,1
+setup dubai company,1
+shamz,1
+shared cloud kitchen dubai,1
+small business ideas dubai,1
+small business ideas in uae,1
+small business ideas in uae from home,1
+small business ideas uae,1
+small businesses in dubai,1
+start a cloud kitchen in dubai,1
+top business in dubai,1
+uae company formation,1
+uae offshore company formation,1
+uae vat pdf,1
+vat advisory in dubai,1
+vat filing services,1
+what are pro services in uae,1
+what are the best business to start in dubai,1
+what is pro services in dubai,1
+what is the cost of employment visa in uae,1
+what small business can i start in dubai,1
+which business is most profitable in uae,1
+which home based business is most profitable,1
+work from home business,1
+
+#  
+# Start date: 20260731
+# End date: 20261028
+Session manual source,Sessions
+adwords,2
+google,2
+chatgpt.com,1
+
+#  
+# Start date: 20260731
+# End date: 20261028
+Nth day
