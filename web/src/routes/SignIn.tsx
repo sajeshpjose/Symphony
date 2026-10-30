@@ -29,7 +29,9 @@ export function SignIn() {
         {!supabaseConfigured && (
           <div className="mt-6">
             <Note tone="warn" title="Supabase is not connected">
-              Copy .env.example to .env and add your Supabase URL and anon key, then restart the dev server.
+              {import.meta.env.DEV
+                ? 'Copy .env.example to .env and add your Supabase URL and anon key, then restart the dev server.'
+                : 'Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Netlify (Site configuration → Environment variables), then redeploy.'}
             </Note>
           </div>
         )}
