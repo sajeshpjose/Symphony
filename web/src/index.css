@@ -37,16 +37,3 @@ html, body, #root { height: 100%; }
 body {
   @apply bg-canvas text-ink font-sans text-sm antialiased;
 }
-
-/* Research report PDF: the browser prints only the report (ResearchRun.tsx, PrintReport). */
-#print-report { display: none; }
-@media print {
-  @page { size: letter; margin: 16mm 18mm; }
-  html, body { background: #fff !important; }
-  #root { display: none !important; }
-  #print-report { display: block; color: #222; font-size: 11pt; line-height: 1.5; }
-  #print-report .pr-page { break-after: page; }
-  #print-report .pr-keep, #print-report tr, #print-report li { break-inside: avoid; }
-  #print-report h2, #print-report h3 { break-after: avoid; }
-  #print-report * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-}

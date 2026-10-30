@@ -11,6 +11,7 @@ import { Clients } from './routes/Clients'
 import { NewClient } from './routes/NewClient'
 import { NewResearch } from './routes/NewResearch'
 import { Research } from './routes/Research'
+import { ResearchPdf } from './routes/ResearchPdf'
 import { ResearchRun } from './routes/ResearchRun'
 import { SignIn } from './routes/SignIn'
 import { Soon } from './routes/Soon'
@@ -19,6 +20,7 @@ const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: 30
 
 const router = createBrowserRouter([
   { path: '/sign-in', element: <SignIn /> },
+  { path: '/research/:id/pdf', element: <ResearchPdf /> },
   {
     element: <Layout />,
     children: [

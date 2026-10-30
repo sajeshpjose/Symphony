@@ -83,7 +83,9 @@ Report sections, in order; include a section only when it has enough included cl
 - content (Content starter themes): five to eight themes, each tied to a verified offering or audience.
 
 Block rules:
-- Block types: paragraph, callout, bullets, table, facts. Every paragraph, callout, bullet, table cell and fact cites the claim ids it rests on.
+- Block types: paragraph, callout, bullets, table, facts, chart. Every paragraph, callout, bullet, table cell, fact and chart point cites the claim ids it rests on.
+- Use one chart where a comparison reads better as a picture: review counts across competitors (kind "bar", the client's bar "highlight": true), sessions or key events by channel ("column", up to three series), spend or results by ad set ("bar"), weekly or monthly trends ("line"). Give each chart a short title and a caption naming the source and period, and cite the claims behind the title and caption in the chart's claim_ids. Values are plain numbers exactly as the claims state them. No chart without numbers from the claims.
+- A callout has a short title in a few words (for example "The clearest finding" or "In the firm's words") and one or two sentences; at most one per section.
 - A block with no claims sets "structural": true and must contain no numbers.
 - Every number in a block must appear in the cited claims' text or quote.
 - State facts plainly. Never use likely, probably, may, might, appears to, seems, perhaps, possibly.
@@ -183,7 +185,22 @@ const WRITE_SCHEMA = {
             items: {
               type: 'object',
               properties: {
-                type: { type: 'string', enum: ['paragraph', 'callout', 'bullets', 'table', 'facts'] },
+                type: { type: 'string', enum: ['paragraph', 'callout', 'bullets', 'table', 'facts', 'chart'] },
+                kind: { type: 'string', enum: ['bar', 'column', 'line'], description: 'chart only' },
+                unit: { type: 'string', description: 'chart only, appended to values, usually empty' },
+                caption: { type: 'string', description: 'chart only: source and period' },
+                series: {
+                  type: 'array',
+                  description: 'chart only, for column and line charts with more than one series',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      name: { type: 'string' },
+                      items: { type: 'array', items: { type: 'object', properties: { label: { type: 'string' }, value: { type: 'number' }, claim_ids: { type: 'array', items: { type: 'string' } }, highlight: { type: 'boolean' } }, required: ['label', 'value', 'claim_ids'] } },
+                    },
+                    required: ['name', 'items'],
+                  },
+                },
                 title: { type: 'string' },
                 text: { type: 'string' },
                 lead: { type: 'boolean' },
@@ -191,10 +208,17 @@ const WRITE_SCHEMA = {
                 claim_ids: { type: 'array', items: { type: 'string' } },
                 items: {
                   type: 'array',
-                  description: 'bullets: {text, claim_ids}. facts: {label, value, claim_ids}.',
+                  description: 'bullets: {text, claim_ids}. facts: {label, value (text), claim_ids}. one-series chart: {label, value (number), claim_ids, highlight}.',
                   items: {
                     type: 'object',
-                    properties: { text: { type: 'string' }, label: { type: 'string' }, value: { type: 'string' }, claim_ids: { type: 'array', items: { type: 'string' } }, structural: { type: 'boolean' } },
+                    properties: {
+                      text: { type: 'string' },
+                      label: { type: 'string' },
+                      value: { type: ['string', 'number'] },
+                      claim_ids: { type: 'array', items: { type: 'string' } },
+                      structural: { type: 'boolean' },
+                      highlight: { type: 'boolean' },
+                    },
                     required: ['claim_ids'],
                   },
                 },

@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { QUESTION_TOPICS, type Block, type Question, type ResearchClaim, type Section } from '@symph/core'
+import { Chart } from '../report/Chart'
 import { Check, Copy, Download, ExternalLink } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { createPortal } from 'react-dom'
 import { Link, useParams } from 'react-router'
 import { Button, Card, Chip, cx, Empty, Note, PageHeader, Segmented, Table, Toggle, type Tone } from '../components/ui'
 import { supabase } from '../lib/supabase'
@@ -150,17 +150,6 @@ function Stat({ label, value }: { label: string; value: number | string | undefi
 function Report({ run }: { run: RunRow }) {
   const [refs, setRefs] = useState(false)
   const sections = run.report?.sections ?? []
-  // Save as PDF through the browser's print dialog; the file name comes from the page title.
-  const download = () => {
-    const before = document.title
-    document.title = `${run.report?.client.name ?? 'Client'} brand intelligence report v1`
-    const restore = () => {
-      document.title = before
-      window.removeEventListener('afterprint', restore)
-    }
-    window.addEventListener('afterprint', restore)
-    window.print()
-  }
   if (!sections.length) return <Card><Empty title="Nothing passed the checks">The site gave too little we could verify. Use the questions for the first meeting.</Empty></Card>
   return (
     <Card>
@@ -171,87 +160,16 @@ function Report({ run }: { run: RunRow }) {
         </div>
         <span className="text-xs text-fg-2">Show sources</span>
         <Toggle label="Show sources" checked={refs} onChange={setRefs} />
-        <Button onClick={download}>
-          <Download className="size-4" /> Download PDF
-        </Button>
+        <a href={`/research/${run.id}/pdf`} target="_blank" rel="noreferrer">
+          <Button>
+            <Download className="size-4" /> Download PDF
+          </Button>
+        </a>
       </div>
-      {createPortal(<PrintReport run={run} />, document.body)}
       <div className="flex flex-col gap-10">
         {sections.map((s, i) => <SectionView key={s.key} n={i + 1} section={s} refs={refs} />)}
       </div>
     </Card>
-  )
-}
-
-// --- PDF layout (print only) ---------------------------------------------------------
-// Follows the skill's report: cover with the mark, numbered sections with a short mustard rule,
-// a closing "Sources and method" page, contact details on the back. No agency name as text.
-
-const MUSTARD = '#D9A520'
-
-function citedIds(sections: Section[]): Set<string> {
-  const ids = new Set<string>()
-  for (const s of sections)
-    for (const b of s.blocks) {
-      if (b.type === 'paragraph' || b.type === 'callout') b.claim_ids?.forEach((i) => ids.add(i))
-      if (b.type === 'bullets' || b.type === 'facts') b.items.forEach((it) => it.claim_ids?.forEach((i) => ids.add(i)))
-      if (b.type === 'table') b.rows.forEach((r) => r.forEach((c) => c.claim_ids?.forEach((i) => ids.add(i))))
-    }
-  return ids
-}
-
-function sourceLabel(c: ResearchClaim): string {
-  if (c.source_url.startsWith('file://')) return `Client export: ${c.source_url.slice(7)}`
-  if (c.source_url.startsWith('google-business-profile://')) return c.source_title || 'Google Business Profile'
-  return c.source_url
-}
-
-function PrintReport({ run }: { run: RunRow }) {
-  const report = run.report
-  if (!report) return null
-  const ids = citedIds(report.sections)
-  const sources = [...new Set((run.claims ?? []).filter((c) => ids.has(c.id) && c.source_url).map(sourceLabel))].sort()
-  const date = new Date(report.date + 'T12:00:00').toLocaleDateString('en-CA', { month: 'long', day: 'numeric', year: 'numeric' })
-  const s = run.stats ?? {}
-  return (
-    <div id="print-report">
-      <div className="pr-page flex min-h-[230mm] flex-col">
-        <img src="/yello-mark.svg" alt="" className="size-14" />
-        <div className="mt-auto">
-          <div style={{ background: MUSTARD }} className="mb-6 h-1 w-16" />
-          <div className="text-sm tracking-wide uppercase" style={{ color: '#6B6B6B' }}>Brand intelligence report</div>
-          <h1 className="mt-2 font-serif text-5xl leading-tight">{report.client.name}</h1>
-          <div className="mt-3 text-base" style={{ color: '#6B6B6B' }}>{[report.client.url.replace(/^https?:\/\//, ''), report.client.location].filter(Boolean).join(' · ')}</div>
-          <div className="mt-10 text-sm">{date}</div>
-        </div>
-      </div>
-      {report.sections.map((sec, i) => (
-        <section key={sec.key} className="mb-10">
-          <div className="text-xs font-semibold" style={{ color: '#6B6B6B' }}>{String(i + 1).padStart(2, '0')}</div>
-          <div style={{ background: MUSTARD }} className="mt-1 mb-3 h-0.5 w-8" />
-          <h2 className="mb-4 font-serif text-2xl">{sec.title}</h2>
-          <div className="flex flex-col gap-3">
-            {sec.blocks.map((b, j) => <div key={j} className="pr-keep"><BlockView block={b} refs={false} /></div>)}
-          </div>
-        </section>
-      ))}
-      <section className="pr-page" style={{ breakBefore: 'page' }}>
-        <div style={{ background: MUSTARD }} className="mb-3 h-0.5 w-8" />
-        <h2 className="mb-4 font-serif text-2xl">Sources and method</h2>
-        <p className="mb-4">
-          This report reviewed {s.pages ?? 0} pages of {report.client.url.replace(/^https?:\/\//, '') || 'the business website'}
-          {s.competitor_pages ? ` and ${s.competitor_pages} pages from competitor websites` : ''} on {date}. Every statement is based on what these sources show on that date.
-        </p>
-        <ul className="flex flex-col gap-1 text-xs" style={{ color: '#6B6B6B' }}>
-          {sources.map((src) => <li key={src} className="break-all">{src}</li>)}
-        </ul>
-      </section>
-      <div className="flex min-h-[230mm] flex-col items-center justify-center gap-4 text-sm" style={{ breakBefore: 'page' }}>
-        <img src="/yello-mark.svg" alt="" className="size-12" />
-        <div style={{ background: MUSTARD }} className="h-0.5 w-8" />
-        <div>dotyello.com · hello@dotyello.com</div>
-      </div>
-    </div>
   )
 }
 
@@ -300,6 +218,13 @@ function BlockView({ block: b, refs }: { block: Block; refs: boolean }) {
             </div>
           ))}
         </div>
+      )
+    case 'chart':
+      return (
+        <figure>
+          <Chart block={b} />
+          {b.caption && <figcaption className="mt-2 text-xs text-fg-3">{b.caption}<Refs ids={b.claim_ids} on={refs} /></figcaption>}
+        </figure>
       )
     case 'table':
       return (
