@@ -15,6 +15,8 @@ export type Workspace = {
   monthly_cap_usd: number
   alert_thresholds: number[]
   stop_at_cap: boolean
+  plugin_token_hint: string | null
+  plugin_token_created_at: string | null
 }
 
 // The signed-in user's workspace (one per user for now).

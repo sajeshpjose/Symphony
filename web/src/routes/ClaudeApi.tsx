@@ -11,6 +11,46 @@ type UsageRow = { purpose: string; calls: number; cost_usd: number }
 const PURPOSE_LABELS: Record<string, string> = { ...TASK_LABELS, regenerate: 'Regenerations', voice: 'Voice samples', test: 'Key tests' }
 const usd = (n: number) => `$${n.toFixed(2)}`
 
+// Token for the Figma plugin. Shown once; only its hash is stored.
+function FigmaPlugin() {
+  const qc = useQueryClient()
+  const { data: ws } = useWorkspace()
+  const [token, setToken] = useState<string | null>(null)
+  const m = useMutation({
+    mutationFn: (action: 'create' | 'revoke') => api<{ token: string | null }>('plugin-token', { action }),
+    onSuccess: (r) => {
+      setToken(r.token)
+      qc.invalidateQueries({ queryKey: ['workspace'] })
+    },
+  })
+  const address = `${window.location.origin}/api/plugin-api`
+  return (
+    <Card
+      title="Figma plugin"
+      subtitle="The plugin reads each client's posts and makes cover frames from their Figma templates. Paste the address and token into the plugin once."
+      action={ws?.plugin_token_hint ? <Chip tone="ok">Token •••{ws.plugin_token_hint}</Chip> : <Chip>No token</Chip>}
+    >
+      {m.error && <div className="mb-3"><Note tone="bad">{(m.error as Error).message}</Note></div>}
+      <Field label="Address"><Input readOnly value={address} onFocus={(e) => e.currentTarget.select()} /></Field>
+      {token && (
+        <div className="mt-4">
+          <Note tone="warn" title="Copy this token now. It is not shown again.">
+            <code className="break-all select-all">{token}</code>
+          </Note>
+        </div>
+      )}
+      <div className="mt-4 flex gap-2">
+        <Button type="button" loading={m.isPending && m.variables === 'create'} onClick={() => m.mutate('create')}>
+          {ws?.plugin_token_hint ? 'Make a new token' : 'Create token'}
+        </Button>
+        {ws?.plugin_token_hint && (
+          <Button type="button" variant="ghost" loading={m.isPending && m.variables === 'revoke'} onClick={() => m.mutate('revoke')}>Turn off</Button>
+        )}
+      </div>
+    </Card>
+  )
+}
+
 export function ClaudeApi() {
   const qc = useQueryClient()
   const { data: ws } = useWorkspace()
@@ -117,6 +157,7 @@ export function ClaudeApi() {
           </Card>
 
           <PlacesKeyCard />
+          <FigmaPlugin />
 
           <Card flush title="Models by task" subtitle="Smaller models for quick jobs keep costs low" className="overflow-hidden">
             <Table head={['Task', 'Model', 'Batch']}>

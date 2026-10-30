@@ -1,0 +1,16 @@
+{
+  "name": "symph-figma-plugin",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Makes cover frames from a client's Figma templates, using the cover text Symph wrote for each post.",
+  "scripts": {
+    "build": "esbuild src/code.ts --bundle --target=es2017 --outfile=dist/code.js && cp src/ui.html dist/ui.html",
+    "watch": "esbuild src/code.ts --bundle --target=es2017 --outfile=dist/code.js --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.100.0",
+    "esbuild": "^0.25.0",
+    "typescript": "~5.6.0"
+  }
+}

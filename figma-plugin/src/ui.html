@@ -1,0 +1,169 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 14px; font: 12px/1.45 Inter, system-ui, sans-serif; color: var(--figma-color-text, #111); background: var(--figma-color-bg, #fff); }
+  h1 { font-size: 14px; margin: 0 0 2px; }
+  h2 { font-size: 11px; margin: 18px 0 6px; text-transform: uppercase; letter-spacing: .06em; color: var(--figma-color-text-secondary, #666); }
+  p { margin: 0 0 8px; color: var(--figma-color-text-secondary, #666); }
+  input[type=text], input[type=password], select { width: 100%; height: 30px; padding: 0 8px; margin-bottom: 6px; border: 1px solid var(--figma-color-border, #ccc); border-radius: 4px; background: transparent; color: inherit; font: inherit; }
+  button { height: 30px; padding: 0 12px; border-radius: 4px; border: 1px solid var(--figma-color-border, #ccc); background: transparent; color: inherit; font: inherit; cursor: pointer; }
+  button.primary { background: var(--figma-color-bg-brand, #0d99ff); border-color: transparent; color: #fff; font-weight: 600; width: 100%; height: 34px; margin-top: 14px; }
+  button:disabled { opacity: .5; cursor: default; }
+  .row { display: flex; gap: 6px; }
+  .item { display: flex; gap: 8px; padding: 8px; margin-bottom: 6px; border: 1px solid var(--figma-color-border, #ddd); border-radius: 6px; cursor: pointer; }
+  .item input { margin-top: 2px; }
+  .item b { display: block; font-weight: 600; }
+  .item span { color: var(--figma-color-text-secondary, #666); display: block; }
+  .tag { display: inline-block; padding: 0 6px; border-radius: 3px; background: var(--figma-color-bg-secondary, #eee); font-size: 11px; }
+  .msg { padding: 8px 10px; border-radius: 6px; margin-top: 10px; background: var(--figma-color-bg-secondary, #eee); }
+  .msg.bad { background: #fde8e8; color: #7a1c1c; }
+  .msg.ok { background: #e4f5e8; color: #1c5a2a; }
+  .hidden { display: none; }
+  details summary { cursor: pointer; font-weight: 600; margin-bottom: 8px; }
+</style>
+
+<h1>Symph covers</h1>
+<p>Makes new frames from this file's templates for each post. Templates are never changed.</p>
+
+<details id="connect">
+  <summary>Connect to Symph</summary>
+  <input id="address" type="text" placeholder="Address, for example https://your-site.netlify.app/api/plugin-api">
+  <input id="token" type="password" placeholder="Token (Symph, Settings, Figma plugin)">
+  <button id="save">Save and load clients</button>
+</details>
+
+<h2>Client</h2>
+<select id="client"><option value="">Connect first</option></select>
+
+<h2>Posts</h2>
+<div id="posts"><p>Pick a client to see posts that have cover text.</p></div>
+
+<h2>Templates on this page</h2>
+<div id="templates"><p>Looking…</p></div>
+
+<button id="create" class="primary" disabled>Create frames</button>
+<div id="status"></div>
+
+<script>
+  const $ = (id) => document.getElementById(id)
+  const send = (msg) => parent.postMessage({ pluginMessage: msg }, '*')
+  let posts = []
+  let templates = []
+
+  const el = (tag, props = {}, kids = []) => {
+    const n = Object.assign(document.createElement(tag), props)
+    kids.forEach((k) => n.append(k))
+    return n
+  }
+  const status = (text, tone) => { $('status').replaceChildren(text ? el('div', { className: 'msg ' + (tone || ''), textContent: text }) : '') }
+  const endpoint = (query) => {
+    let a = $('address').value.trim().replace(/\/+$/, '')
+    if (!/\/api\/plugin-api$/.test(a)) a += '/api/plugin-api'
+    return a + (query || '')
+  }
+  const call = async (query) => {
+    const res = await fetch(endpoint(query), { headers: { authorization: 'Bearer ' + $('token').value.trim() } })
+    const body = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(body.error || 'Request failed (' + res.status + ')')
+    return body
+  }
+
+  function refreshButton() {
+    const p = [...document.querySelectorAll('#posts input:checked')].length
+    const t = [...document.querySelectorAll('#templates input:checked')].length
+    $('create').disabled = !(p && t)
+    $('create').textContent = p && t ? 'Create ' + p * t + ' frame' + (p * t === 1 ? '' : 's') : 'Create frames'
+  }
+
+  function renderPosts() {
+    const box = $('posts')
+    if (!posts.length) { box.replaceChildren(el('p', { textContent: 'No posts with cover text for this client yet.' })); refreshButton(); return }
+    box.replaceChildren(...posts.map((p, i) => {
+      const cb = el('input', { type: 'checkbox', value: String(i), onchange: refreshButton })
+      const label = el('label', { className: 'item' }, [cb, el('div', {}, [
+        el('b', { textContent: p.cover.heading }),
+        el('span', { textContent: p.cover.eyebrow.toUpperCase() + ' · ' + p.cover.description }),
+        el('span', { textContent: p.title }),
+        el('span', {}, [el('span', { className: 'tag', textContent: p.status === 'reviewed' ? 'Reviewed' : 'To review' })]),
+      ])])
+      return label
+    }))
+    refreshButton()
+  }
+
+  function renderTemplates() {
+    const box = $('templates')
+    if (!templates.length) {
+      box.replaceChildren(el('p', { textContent: 'No template frames here. Open the page with your templates (frames named like "Instagram - 1080x1350").' }))
+      refreshButton()
+      return
+    }
+    box.replaceChildren(...templates.map((t) => el('label', { className: 'item' }, [
+      el('input', { type: 'checkbox', checked: true, value: t.id, onchange: refreshButton }),
+      el('div', {}, [el('b', { textContent: t.name }), el('span', { textContent: t.w + ' x ' + t.h })]),
+    ])))
+    refreshButton()
+  }
+
+  async function loadClients() {
+    status('Loading clients…')
+    try {
+      const { clients } = await call('')
+      const saved = $('client').dataset.saved || ''
+      $('client').replaceChildren(el('option', { value: '', textContent: 'Choose a client' }), ...clients.map((c) => el('option', { value: c.id, textContent: c.name, selected: c.id === saved })))
+      status('')
+      $('connect').open = false
+      if (saved) loadPosts()
+    } catch (e) { status(e.message, 'bad'); $('connect').open = true }
+  }
+
+  async function loadPosts() {
+    const id = $('client').value
+    send({ type: 'save-client', clientId: id })
+    posts = []
+    renderPosts()
+    if (!id) return
+    try {
+      const body = await call('?clientId=' + encodeURIComponent(id))
+      posts = body.posts
+      renderPosts()
+    } catch (e) { status(e.message, 'bad') }
+  }
+
+  $('save').onclick = () => { send({ type: 'save-settings', address: $('address').value.trim(), token: $('token').value.trim() }); loadClients() }
+  $('client').onchange = loadPosts
+  $('create').onclick = () => {
+    const chosen = [...document.querySelectorAll('#posts input:checked')].map((c) => posts[Number(c.value)])
+    const templateIds = [...document.querySelectorAll('#templates input:checked')].map((c) => c.value)
+    $('create').disabled = true
+    status('Creating frames…')
+    send({
+      type: 'create',
+      templateIds,
+      posts: chosen.map((p) => ({ id: p.id, title: p.title, date: String(p.created_at).slice(0, 10), cover: p.cover })),
+    })
+  }
+
+  onmessage = (e) => {
+    const m = e.data.pluginMessage
+    if (!m) return
+    if (m.type === 'init') {
+      $('address').value = m.address
+      $('token').value = m.token
+      $('client').dataset.saved = m.clientId
+      if (m.address && m.token) loadClients(); else $('connect').open = true
+    } else if (m.type === 'templates') {
+      templates = m.templates
+      renderTemplates()
+    } else if (m.type === 'done') {
+      status('Made ' + m.frames + ' frame' + (m.frames === 1 ? '' : 's') + ' in ' + m.sections + ' section' + (m.sections === 1 ? '' : 's') + ' on the Posts page.' + (m.warnings.length ? ' Notes: ' + m.warnings.join('; ') : ''), m.warnings.length ? '' : 'ok')
+      refreshButton()
+    } else if (m.type === 'error') {
+      status(m.message, 'bad')
+      refreshButton()
+    }
+  }
+  send({ type: 'init' })
+</script>
