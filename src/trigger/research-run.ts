@@ -78,6 +78,25 @@ function undashSections(sections: Section[]): Section[] {
   }))
 }
 
+const STEP_LABELS: Record<string, string> = {
+  start: 'starting',
+  crawl: 'reading the website',
+  claims: 'pulling out facts',
+  competitors: 'competitors',
+  reviews: 'Google ratings',
+  verify: 'checking quotes',
+  write: 'writing the report',
+}
+
+// The real cause of an error, for the run page and the Trigger.dev log.
+function errorDetail(e: unknown): string {
+  if (!e) return 'unknown error'
+  const any = e as { message?: string; status?: number; error?: { error?: { message?: string } }; details?: string; code?: string }
+  const api = any.error?.error?.message // Anthropic API error body
+  const parts = [any.status ? `HTTP ${any.status}` : '', api ?? any.message ?? '', any.details ?? '', any.code ? `code ${any.code}` : ''].filter(Boolean)
+  return (parts.join(' · ') || JSON.stringify(e)).slice(0, 600)
+}
+
 export const researchRun = schemaTask({
   id: 'research-run',
   schema: z.object({ runId: z.string().uuid() }),
@@ -99,7 +118,9 @@ export const researchRun = schemaTask({
       const { error } = await db.from('research_runs').update(fields).eq('id', runId)
       if (error) logger.warn('Could not update run', { error })
     }
+    let currentStep = 'start'
     const progress = async (step: string, text: string) => {
+      currentStep = step
       metadata.set('step', step).set('progress', text)
       await update({ step, progress: text })
     }
@@ -196,67 +217,74 @@ export const researchRun = schemaTask({
       let competitorSummary = ''
       const qualified: { name: string; url: string }[] = []
       if (website || known.length) {
-        await progress('competitors', 'Searching for competitors')
-        const found = await toolCall<{ candidates: { name: string; url: string; named: boolean; why?: string }[] }>(call, {
-          content: COMPETITOR_SEARCH_INSTRUCTION({ name: client.name, url: website ?? '', services: extracted.services ?? [], area: extracted.area ?? client.location ?? '', known }),
-          toolName: 'competitor_candidates',
-          schema: CANDIDATES_SCHEMA,
-          maxTokens: 3000,
-          webSearch: { maxUses: 4 },
-        })
-        const clientHost = website ? new URL(website).hostname.replace(/^www\./, '') : ''
-        const candidates = (found.candidates ?? [])
-          .map((c) => ({ ...c, url: normalizeUrl(c.url) }))
-          .filter((c): c is typeof c & { url: string } => !!c.url && new URL(c.url).hostname.replace(/^www\./, '') !== clientHost)
-          .slice(0, Math.max(MAX_COMPETITORS, known.length))
-
-        const compPages: SavedPage[] = []
-        const read: { name: string; named: boolean }[] = []
-        for (const [i, c] of candidates.entries()) {
-          await progress('competitors', `Reading competitor sites · ${i + 1} of ${candidates.length}`)
-          const crawl = await crawlSite(c.url, { maxPages: PAGES_PER_COMPETITOR, maxDepth: 1 })
-          if (!crawl.pages.length) {
-            warnings.push(`Could not read competitor ${c.name} (${c.url})`)
-            continue
-          }
-          read.push({ name: c.name, named: !!c.named })
-          for (const p of crawl.pages) {
-            const page: SavedPage = { ...p, ref: `P${String(pages.length + compPages.length + 1).padStart(2, '0')}`, kind: 'competitor', competitor: c.name }
-            compPages.push(page)
-          }
-        }
-        await savePages(compPages)
-        pages.push(...compPages)
-
-        if (read.length) {
-          await progress('competitors', `Comparing ${read.length} competitor${read.length === 1 ? '' : 's'}`)
-          const facts = await toolCall<{
-            competitors: { name: string; overlapping_services: string[]; area: string; qualifies: boolean; reason?: string }[]
-            claims: RawClaim[]
-          }>(call, {
-            content: [
-              { type: 'text', text: pagesBlock(compPages, COMPETITOR_PAGE_WORDS) },
-              { type: 'text', text: COMPETITOR_FACTS_INSTRUCTION({ name: client.name, services: extracted.services ?? [], area: extracted.area ?? '', competitors: read }) },
-            ],
-            toolName: 'competitor_facts',
-            schema: COMPETITOR_FACTS_SCHEMA,
-            maxTokens: 8000,
+        try {
+          await progress('competitors', 'Searching for competitors')
+          const found = await toolCall<{ candidates: { name: string; url: string; named: boolean; why?: string }[] }>(call, {
+            content: COMPETITOR_SEARCH_INSTRUCTION({ name: client.name, url: website ?? '', services: extracted.services ?? [], area: extracted.area ?? client.location ?? '', known }),
+            toolName: 'competitor_candidates',
+            schema: CANDIDATES_SCHEMA,
+            maxTokens: 3000,
+            webSearch: { maxUses: 4 },
           })
-          // A competitor goes in the report only if it was named or passes both tests (decision D22).
-          const qualifies = new Map(
-            (facts.competitors ?? []).map((c) => [
-              c.name.toLowerCase(),
-              read.find((r) => r.name.toLowerCase() === c.name.toLowerCase())?.named || (c.qualifies && c.overlapping_services.length >= 2 && !!c.area),
-            ]),
-          )
-          for (const c of facts.claims ?? []) {
-            const ok = qualifies.get((c.competitor ?? '').toLowerCase())
-            raw.push({ ...c, section: 'competitors', evidence: 'stated', decision: ok ? c.decision : 'question' })
+          const clientHost = website ? new URL(website).hostname.replace(/^www\./, '') : ''
+          const candidates = (found.candidates ?? [])
+            .map((c) => ({ ...c, url: normalizeUrl(c.url) }))
+            .filter((c): c is typeof c & { url: string } => !!c.url && new URL(c.url).hostname.replace(/^www\./, '') !== clientHost)
+            .slice(0, Math.max(MAX_COMPETITORS, known.length))
+
+          const compPages: SavedPage[] = []
+          const read: { name: string; named: boolean }[] = []
+          for (const [i, c] of candidates.entries()) {
+            await progress('competitors', `Reading competitor sites · ${i + 1} of ${candidates.length}`)
+            const crawl = await crawlSite(c.url, { maxPages: PAGES_PER_COMPETITOR, maxDepth: 1 })
+            if (!crawl.pages.length) {
+              warnings.push(`Could not read competitor ${c.name} (${c.url})`)
+              continue
+            }
+            read.push({ name: c.name, named: !!c.named })
+            for (const p of crawl.pages) {
+              const page: SavedPage = { ...p, ref: `P${String(pages.length + compPages.length + 1).padStart(2, '0')}`, kind: 'competitor', competitor: c.name }
+              compPages.push(page)
+            }
           }
-          for (const c of candidates) if (qualifies.get(c.name.toLowerCase())) qualified.push({ name: c.name, url: c.url })
-          competitorSummary = (facts.competitors ?? [])
-            .map((c) => `${c.name}: ${qualifies.get(c.name.toLowerCase()) ? 'qualifies' : 'does not qualify'}. Overlapping services: ${c.overlapping_services.join(', ') || 'none'}. Area: ${c.area || 'not stated'}.${c.reason ? ` ${c.reason}` : ''}`)
-            .join('\n')
+          await savePages(compPages)
+          pages.push(...compPages)
+
+          if (read.length) {
+            await progress('competitors', `Comparing ${read.length} competitor${read.length === 1 ? '' : 's'}`)
+            const facts = await toolCall<{
+              competitors: { name: string; overlapping_services: string[]; area: string; qualifies: boolean; reason?: string }[]
+              claims: RawClaim[]
+            }>(call, {
+              content: [
+                { type: 'text', text: pagesBlock(compPages, COMPETITOR_PAGE_WORDS) },
+                { type: 'text', text: COMPETITOR_FACTS_INSTRUCTION({ name: client.name, services: extracted.services ?? [], area: extracted.area ?? '', competitors: read }) },
+              ],
+              toolName: 'competitor_facts',
+              schema: COMPETITOR_FACTS_SCHEMA,
+              maxTokens: 8000,
+            })
+            // A competitor goes in the report only if it was named or passes both tests (decision D22).
+            const qualifies = new Map(
+              (facts.competitors ?? []).map((c) => [
+                c.name.toLowerCase(),
+                read.find((r) => r.name.toLowerCase() === c.name.toLowerCase())?.named || (c.qualifies && c.overlapping_services.length >= 2 && !!c.area),
+              ]),
+            )
+            for (const c of facts.claims ?? []) {
+              const ok = qualifies.get((c.competitor ?? '').toLowerCase())
+              raw.push({ ...c, section: 'competitors', evidence: 'stated', decision: ok ? c.decision : 'question' })
+            }
+            for (const c of candidates) if (qualifies.get(c.name.toLowerCase())) qualified.push({ name: c.name, url: c.url })
+            competitorSummary = (facts.competitors ?? [])
+              .map((c) => `${c.name}: ${qualifies.get(c.name.toLowerCase()) ? 'qualifies' : 'does not qualify'}. Overlapping services: ${c.overlapping_services.join(', ') || 'none'}. Area: ${c.area || 'not stated'}.${c.reason ? ` ${c.reason}` : ''}`)
+              .join('\n')
+          }
+        } catch (e) {
+          // A failed search or comparison should not cost the whole run.
+          if (e instanceof HttpError) throw e // monthly cap reached
+          logger.warn('Competitor step failed', { error: errorDetail(e) })
+          warnings.push(`Competitors skipped: ${errorDetail(e)}`)
         }
       }
 
@@ -368,15 +396,18 @@ export const researchRun = schemaTask({
       logger.info('Research run ready', stats)
       return { status: 'ready', ...stats, cost }
     } catch (e) {
-      const message =
+      const detail = errorDetail(e)
+      const friendly =
         e instanceof HttpError || e instanceof AbortTaskRunError
           ? e.message
           : (e as { status?: number }).status === 401
             ? 'Claude rejected the API key. Check it in Settings.'
             : (e as { status?: number }).status === 429
               ? 'Claude is busy or the rate limit was reached. Try again in a few minutes.'
-              : 'The run stopped with an error. Try again; if it fails twice, check the Trigger.dev dashboard.'
-      logger.error('Research run failed', { error: (e as Error).message })
+              : 'The run stopped with an error.'
+      const stepLabel = STEP_LABELS[currentStep] ?? currentStep
+      const message = (friendly === detail ? `${friendly} (step: ${stepLabel})` : `${friendly} Step: ${stepLabel}. Details: ${detail}`).slice(0, 1000)
+      logger.error('Research run failed', { step: currentStep, error: detail })
       await update({ status: 'failed', progress: null, error: message, warnings, cost_usd: Number(cost.toFixed(4)), finished_at: new Date().toISOString() })
       throw new AbortTaskRunError(message)
     }
