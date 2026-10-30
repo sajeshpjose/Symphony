@@ -10,6 +10,7 @@ export type CallCtx = {
   workspaceId: string
   clientId: string
   system: string
+  purpose?: string // logged with the usage row; defaults to 'research'
   onCost: (usd: number) => void
 }
 
@@ -49,7 +50,7 @@ export async function toolCall<T>(ctx: CallCtx, args: ToolCallArgs): Promise<T> 
 
     const usage: Usage = { ...res.usage, web_searches: res.usage.server_tool_use?.web_search_requests ?? 0 }
     ctx.onCost(costUsd(ctx.model, usage))
-    await logUsage({ workspaceId: ctx.workspaceId, clientId: ctx.clientId, purpose: 'research', model: ctx.model, usage })
+    await logUsage({ workspaceId: ctx.workspaceId, clientId: ctx.clientId, purpose: ctx.purpose ?? 'research', model: ctx.model, usage })
 
     const out = res.content.find((b) => b.type === 'tool_use' && b.name === args.toolName)
     if (out && out.type === 'tool_use') return out.input as T
