@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "netlify dev",
+    "dev": "netlify dev --filter @symph/web",
     "dev:web": "npm run dev -w web",
     "build": "npm run build -w web",
     "typecheck": "npm run typecheck --workspaces --if-present && tsc -p netlify/functions --noEmit && tsc -p tsconfig.json",
