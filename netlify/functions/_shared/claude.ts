@@ -47,8 +47,9 @@ export async function logUsage(args: {
   });
 }
 
-// One Claude call that must return structured JSON. Forces a single tool call so the
-// output always matches the schema, and puts the client brief in a cached system block.
+// One Claude call that must return structured JSON, through a tool call, with the client brief in a
+// cached system block. Some models (Sonnet 5.5) reject a forced tool_choice, so the tool is offered
+// with tool_choice auto, Claude is told to call it, and asked once more if it answers in text.
 export async function jsonCall<T>(args: {
   claude: Anthropic
   model: string
@@ -58,15 +59,28 @@ export async function jsonCall<T>(args: {
   schema: Record<string, unknown>
   maxTokens?: number
 }): Promise<{ data: T; usage: Usage }> {
-  const res = await args.claude.messages.create({
-    model: args.model,
-    max_tokens: args.maxTokens ?? 1500,
-    system: [{ type: 'text', text: args.brief, cache_control: { type: 'ephemeral' } }],
-    tools: [{ name: args.toolName, description: 'Return the result.', input_schema: args.schema as Anthropic.Tool.InputSchema }],
-    tool_choice: { type: 'tool', name: args.toolName },
-    messages: [{ role: 'user', content: args.instruction }],
-  })
-  const block = res.content.find((b) => b.type === 'tool_use')
-  if (!block || block.type !== 'tool_use') throw new HttpError(502, 'Claude did not return a result. Try again.')
-  return { data: block.input as T, usage: res.usage }
+  const tools: Anthropic.Tool[] = [{ name: args.toolName, description: 'Return the result.', input_schema: args.schema as Anthropic.Tool.InputSchema }]
+  const messages: Anthropic.MessageParam[] = [
+    { role: 'user', content: `${args.instruction}\n\nFinish by calling the ${args.toolName} tool with your result. Do not answer in plain text.` },
+  ]
+  const total: Usage = { input_tokens: 0, output_tokens: 0, cache_creation_input_tokens: 0, cache_read_input_tokens: 0 }
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const res = await args.claude.messages.create({
+      model: args.model,
+      max_tokens: args.maxTokens ?? 1500,
+      system: [{ type: 'text', text: args.brief, cache_control: { type: 'ephemeral' } }],
+      tools,
+      tool_choice: { type: 'auto' },
+      messages,
+    })
+    total.input_tokens += res.usage.input_tokens
+    total.output_tokens += res.usage.output_tokens
+    total.cache_creation_input_tokens! += res.usage.cache_creation_input_tokens ?? 0
+    total.cache_read_input_tokens! += res.usage.cache_read_input_tokens ?? 0
+    const block = res.content.find((b) => b.type === 'tool_use' && b.name === args.toolName)
+    if (block && block.type === 'tool_use') return { data: block.input as T, usage: total }
+    messages.push({ role: 'assistant', content: res.content as Anthropic.ContentBlockParam[] })
+    messages.push({ role: 'user', content: `Call the ${args.toolName} tool now with your result.` })
+  }
+  throw new HttpError(502, 'Claude did not return a result. Try again.')
 }
