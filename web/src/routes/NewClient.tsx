@@ -43,12 +43,14 @@ export function NewClient() {
   const { data: ws } = useWorkspace()
   const { id } = useParams() // set when editing an existing client
   const { data: existing } = useClientBundle(id)
-  const [f, setF] = useState({ name: '', website: '', industry: '', location: '', sells: '', audience: '', goal: '', success_measure: '' })
+  const [f, setF] = useState({ name: '', website: '', industry: '', location: '', sells: '', audience: '', goal: '', success_measure: '', author_name: '', author_role: '', cta_text: '', cta_url: '', figma_url: '' })
+  const [services, setServices] = useState('')
   const [channels, setChannels] = useState<Channel[]>([...CHANNELS])
   useEffect(() => {
     if (!existing) return
     const c = existing.client
-    setF({ name: c.name, website: c.website ?? '', industry: c.industry ?? '', location: c.location ?? '', sells: c.sells ?? '', audience: c.audience ?? '', goal: c.goal ?? '', success_measure: c.success_measure ?? '' })
+    setF({ name: c.name, website: c.website ?? '', industry: c.industry ?? '', location: c.location ?? '', sells: c.sells ?? '', audience: c.audience ?? '', goal: c.goal ?? '', success_measure: c.success_measure ?? '', author_name: c.author_name ?? '', author_role: c.author_role ?? '', cta_text: c.cta_text ?? '', cta_url: c.cta_url ?? '', figma_url: c.figma_url ?? '' })
+    setServices((c.services ?? []).map((x) => (x.url ? `${x.name} | ${x.url}` : x.name)).join('\n'))
     setChannels(c.social_channels as Channel[])
   }, [existing])
   const set = (k: keyof typeof f) => (e: { target: { value: string } }) => setF({ ...f, [k]: e.target.value })
@@ -75,7 +77,12 @@ export function NewClient() {
   const save = useMutation({
     mutationFn: async () => {
       if (!ws) throw new Error('Workspace not loaded yet')
-      const row = { ...f, website: f.website.replace(/^https?:\/\//, '') || null, social_channels: channels }
+      const parsed = services
+        .split('\n')
+        .map((l) => l.split('|').map((x) => x.trim()))
+        .filter(([name]) => name)
+        .map(([name, url]) => (url ? { name, url } : { name }))
+      const row = { ...f, website: f.website.replace(/^https?:\/\//, '') || null, social_channels: channels, services: parsed }
       if (id) {
         const { error } = await supabase.from('clients').update(row).eq('id', id)
         if (error) throw error
@@ -182,6 +189,18 @@ export function NewClient() {
                 <Field label="What they sell" help="Needed for content" className="col-span-2"><Textarea value={f.sells} onChange={set('sells')} placeholder="Spring and fall clean-ups, weekly lawn care…" /></Field>
                 <Field label="Who they write for" help="Needed for content" className="col-span-2"><Textarea value={f.audience} onChange={set('audience')} placeholder="Homeowners in Halton with busy schedules…" /></Field>
               </div>
+            </Card>
+            <Card title="Byline and next step" subtitle="The author is shown on every post. The call to action and services are optional: with them each post ends with a link to the right page.">
+              <div className="grid grid-cols-2 gap-4">
+                <Field label="Author name" help="Needed for content"><Input value={f.author_name} onChange={set('author_name')} placeholder="Mark Birch" /></Field>
+                <Field label="Author role"><Input value={f.author_role} onChange={set('author_role')} placeholder="Owner" /></Field>
+                <Field label="Call to action (optional)"><Input value={f.cta_text} onChange={set('cta_text')} placeholder="Book a free quote" /></Field>
+                <Field label="Call to action link (optional)"><Input value={f.cta_url} onChange={set('cta_url')} placeholder="https://birchandco.ca/quote" /></Field>
+                <Field label="Services (optional)" help="One per line: name | page link" className="col-span-2"><Textarea value={services} onChange={(e) => setServices(e.target.value)} placeholder={'Lawn care | https://birchandco.ca/lawn-care\nSnow removal | https://birchandco.ca/snow'} /></Field>
+              </div>
+            </Card>
+            <Card title="Social templates" subtitle="The client's Figma file with the cover templates. The Figma plugin makes new frames from them for each post; it never changes the templates.">
+              <Field label="Figma file link (optional)"><Input value={f.figma_url} onChange={set('figma_url')} placeholder="https://www.figma.com/design/…" /></Field>
             </Card>
             <Card title="Goal" subtitle="Topics are picked to support this goal">
               <div className="grid grid-cols-2 gap-4">

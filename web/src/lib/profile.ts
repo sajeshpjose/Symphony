@@ -15,7 +15,7 @@ export type ProfileItem = {
 }
 
 type Parts = {
-  client: Pick<ClientRow, 'sells' | 'audience'>
+  client: Pick<ClientRow, 'sells' | 'audience' | 'author_name'>
   voice: Pick<VoiceRow, 'summary' | 'words_use' | 'words_avoid' | 'claims_never' | 'disclaimer'> | null
   facts: Pick<FactRow, 'status'>[]
   examples: Pick<ExampleRow, 'kind'>[]
@@ -25,9 +25,9 @@ export function profileItems({ client, voice, facts, examples }: Parts): Profile
   const rules = (voice?.words_use?.length ?? 0) + (voice?.words_avoid?.length ?? 0) + (voice?.claims_never?.length ?? 0) + (voice?.disclaimer ? 1 : 0)
   const approved = facts.filter((f) => f.status === 'approved').length
   const loved = examples.filter((e) => e.kind === 'loved').length
-  const hasBusiness = !!client.sells?.trim() && !!client.audience?.trim()
+  const hasBusiness = !!client.sells?.trim() && !!client.audience?.trim() && !!client.author_name?.trim()
   return [
-    { key: 'business', label: 'Business details', step: 1, required: true, done: hasBusiness, detail: hasBusiness ? 'What they sell and who they serve' : 'Add what they sell and who they serve' },
+    { key: 'business', label: 'Business details', step: 1, required: true, done: hasBusiness, detail: hasBusiness ? 'What they sell, who they serve and the author' : 'Add what they sell, who they serve and the author' },
     { key: 'voice', label: 'Voice and tone', step: 2, required: true, done: !!voice?.summary?.trim(), detail: voice?.summary?.trim() ? 'Set' : 'Not set' },
     { key: 'rules', label: 'Rules and claims', step: 3, required: false, done: rules > 0, detail: rules ? `${rules} rule${rules === 1 ? '' : 's'}` : 'None yet' },
     { key: 'facts', label: 'Facts', step: 4, required: false, done: approved > 0, detail: approved ? `${approved} approved` : 'None yet' },

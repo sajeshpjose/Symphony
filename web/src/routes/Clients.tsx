@@ -11,6 +11,7 @@ type Row = {
   status: string
   sells: string | null
   audience: string | null
+  author_name: string | null
   voice_profiles: { summary: string | null; words_use: string[]; words_avoid: string[]; claims_never: string[]; disclaimer: string | null } | null
   facts: { status: 'approved' | 'needs_proof' | 'consent_needed' }[]
   examples: { kind: 'loved' | 'disliked' }[]
@@ -34,7 +35,7 @@ export function Clients() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('clients')
-        .select('id, name, website, status, sells, audience, voice_profiles(summary, words_use, words_avoid, claims_never, disclaimer), facts(status), examples(kind), research_runs(status, created_at), topics(status), posts(status)')
+        .select('id, name, website, status, sells, audience, author_name, voice_profiles(summary, words_use, words_avoid, claims_never, disclaimer), facts(status), examples(kind), research_runs(status, created_at), topics(status), posts(status)')
         .order('created_at', { ascending: false })
       if (error) throw error
       return data as unknown as Row[]
