@@ -17,7 +17,8 @@
     "lucide-react": "^1.64.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
-    "react-router": "^7.18.5"
+    "react-router": "^7.18.5",
+    "read-excel-file": "^9.3.14"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",

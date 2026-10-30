@@ -19,6 +19,7 @@ const researchChip = (runs: Row['research_runs']): [string, Tone] => {
   if (!last) return ['Not run', 'neutral']
   if (last.status === 'ready') return [`Ready · ${new Date(last.created_at).toLocaleDateString('en-CA', { month: 'short', day: 'numeric' })}`, 'ok']
   if (last.status === 'failed') return ['Failed', 'bad']
+  if (last.status === 'needs_input') return ['Needs page text', 'warn']
   return ['Running', 'accent']
 }
 

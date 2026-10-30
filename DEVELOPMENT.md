@@ -11,6 +11,7 @@
 2. Create the database:
    - Supabase dashboard → SQL editor → paste `supabase/migrations/20261030000000_mvp_schema.sql` → Run, **or**
    - `supabase link --project-ref YOUR-REF && supabase db push`
+   - Already set up? Run the newer files in `supabase/migrations/` in order (for example `20261030120000_research_runs.sql`).
 3. Supabase dashboard → Authentication → URL configuration: add `http://localhost:8888` and your Netlify URL to the redirect URLs (for magic links).
 4. Copy `.env.example` to `.env` and fill in the Supabase URL, anon key and service role key (Project settings → API).
 5. Run everything: `npm run dev` (Netlify dev on http://localhost:8888, which serves the app and the functions).
@@ -28,6 +29,11 @@ Every time: `npm run dev:trigger`. It registers the tasks with the dashboard and
 
 Deploy tasks to production with `npm run deploy:trigger`, and add the production `TRIGGER_SECRET_KEY` to Netlify's environment variables.
 
+The tasks read the database, so the Trigger.dev **Production** environment also needs `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` (dashboard → Environment variables). In development, `trigger dev` reads them from `.env`.
+
+## Google ratings (optional)
+Google Cloud console → APIs and services → enable "Places API (New)" → Credentials → Create API key (restrict it to that API). Paste it in Settings → Google ratings.
+
 ## Deploy to Netlify
 - New site from the GitHub repo. Build command and publish folder come from `netlify.toml`.
 - Site settings → Environment variables: add the four values from `.env`.
@@ -39,8 +45,9 @@ Deploy tasks to production with `npm run deploy:trigger`, and add the production
 - Shared: `voiceBrief()` builds the client brief every Claude call uses (cached); `lintText()` ports the content skill's dash, banned-word and pattern checks.
 - Functions: `/api/claude-key` (save and test the key), `/api/voice-sample`, `/api/learn-voice`.
 - Trigger.dev: config and a `hello-world` task to check the connection.
+- Research (D32 to D35): `research-run` task in `src/trigger/` with the crawler, prompts, Claude calls and Places lookup in `src/research/`; evidence checks in `packages/core/src/research.ts` and upload importers in `packages/core/src/importers.ts`; `/api/research-start`, `/api/places-key`. Screens: Research list, New research run (website, known competitors, pasted text, exports), and the run page (live progress, report, claim review with "Add to facts", meeting questions, pages read).
 
 ## Next
-1. Research run (Trigger.dev task) and the research report screen.
+1. First real research runs on Danburite and GrandMoor; tune prompts against the sample reports.
 2. Next 5 topics, writing posts in a batch, checks, review screen.
 3. Social copy and image keywords.

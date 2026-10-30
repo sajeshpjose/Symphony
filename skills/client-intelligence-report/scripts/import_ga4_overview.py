@@ -86,7 +86,7 @@ def main():
         import datetime as dt
         sd = dt.datetime.strptime(meta["start"], "%Y%m%d").date()
         f["week_labels"] = [(sd + dt.timedelta(days=7 * (n - 1))).strftime("%d %b") for n, _ in f["new_users_by_week"]]
-        pk = max(f["new_users_by_week"], key=lambda x: x[1]); f["peak_week_new_users"] = pk[1]; f["peak_week_label"] = f["week_labels"][pk[0] - 1]
+        pk = max(f["new_users_by_week"], key=lambda x: x[1]); f["peak_week_new_users"] = pk[1]; f["peak_week_label"] = f["week_labels"][f["new_users_by_week"].index(pk)]
         f["min_week_new_users"] = min(v for _, v in f["new_users_by_week"])
     if f.get("retention_cohorts"):
         wk1 = [(c, w[1]) for c, w in f["retention_cohorts"] if len(w) > 1 and w[1] >= 0]
