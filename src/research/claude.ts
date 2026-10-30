@@ -22,8 +22,9 @@ type ToolCallArgs = {
 }
 
 // Sends one request and returns the input of the output tool.
-// With web search on, Claude may search first, so the output tool is offered with tool_choice auto
-// and paused server-tool turns are continued.
+// Some models (Sonnet 5.5) reject a forced tool_choice, so the tool is offered with tool_choice auto
+// and Claude is told to call it. If it answers in text instead, it is asked once more.
+// Paused server-tool turns (web search) are continued.
 export async function toolCall<T>(ctx: CallCtx, args: ToolCallArgs): Promise<T> {
   await assertUnderCap(ctx.workspaceId)
   const tools: Anthropic.ToolUnion[] = [
@@ -31,7 +32,9 @@ export async function toolCall<T>(ctx: CallCtx, args: ToolCallArgs): Promise<T> 
   ]
   if (args.webSearch) tools.push({ type: 'web_search_20250305', name: 'web_search', max_uses: args.webSearch.maxUses })
 
-  const messages: Anthropic.MessageParam[] = [{ role: 'user', content: args.content }]
+  const ask: Anthropic.TextBlockParam = { type: 'text', text: `Finish by calling the ${args.toolName} tool with your result. Do not answer in plain text.` }
+  const content: Anthropic.ContentBlockParam[] = typeof args.content === 'string' ? [{ type: 'text', text: args.content }, ask] : [...args.content, ask]
+  const messages: Anthropic.MessageParam[] = [{ role: 'user', content }]
   for (let turn = 0; turn < 4; turn++) {
     const res = await ctx.claude.messages
       .stream({
@@ -39,7 +42,7 @@ export async function toolCall<T>(ctx: CallCtx, args: ToolCallArgs): Promise<T> 
         max_tokens: args.maxTokens,
         system: [{ type: 'text', text: ctx.system, cache_control: { type: 'ephemeral' } }],
         tools,
-        tool_choice: args.webSearch ? { type: 'auto' } : { type: 'tool', name: args.toolName },
+        tool_choice: { type: 'auto' },
         messages,
       })
       .finalMessage()
