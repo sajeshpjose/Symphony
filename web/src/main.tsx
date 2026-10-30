@@ -9,6 +9,9 @@ import { ClaudeApi } from './routes/ClaudeApi'
 import { ClientPage } from './routes/ClientPage'
 import { Clients } from './routes/Clients'
 import { NewClient } from './routes/NewClient'
+import { NewResearch } from './routes/NewResearch'
+import { Research } from './routes/Research'
+import { ResearchRun } from './routes/ResearchRun'
 import { SignIn } from './routes/SignIn'
 import { Soon } from './routes/Soon'
 
@@ -24,7 +27,9 @@ const router = createBrowserRouter([
       { path: 'clients/new', element: <NewClient /> },
       { path: 'clients/:id', element: <ClientPage /> },
       { path: 'clients/:id/edit', element: <NewClient /> },
-      { path: 'research', element: <Soon title="Research">Research runs and reports for each client.</Soon> },
+      { path: 'research', element: <Research /> },
+      { path: 'research/new', element: <NewResearch /> },
+      { path: 'research/:id', element: <ResearchRun /> },
       { path: 'topics', element: <Soon title="Topics">The next 5 blog topics for each client.</Soon> },
       { path: 'content', element: <Soon title="Content">Posts written by Claude, waiting for your review.</Soon> },
       { path: 'settings', element: <ClaudeApi /> },

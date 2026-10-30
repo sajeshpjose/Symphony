@@ -116,6 +116,8 @@ export function ClaudeApi() {
             </p>
           </Card>
 
+          <PlacesKeyCard />
+
           <Card flush title="Models by task" subtitle="Smaller models for quick jobs keep costs low" className="overflow-hidden">
             <Table head={['Task', 'Model', 'Batch']}>
               {TASKS.map((t: Task) => (
@@ -167,5 +169,63 @@ export function ClaudeApi() {
         </div>
       </div>
     </>
+  )
+}
+
+// Google Places key: Google ratings and review counts in research reports.
+function PlacesKeyCard() {
+  const qc = useQueryClient()
+  const { data: ws } = useWorkspace()
+  const [apiKey, setApiKey] = useState('')
+  const key = useMutation({
+    mutationFn: (body: { action: 'save'; apiKey: string } | { action: 'test' }) => api<{ ok: boolean; message: string }>('places-key', body),
+    onSuccess: () => {
+      setApiKey('')
+      qc.invalidateQueries({ queryKey: ['workspace'] })
+    },
+  })
+  const chip = !ws?.places_key_hint ? (
+    <Chip>Not connected</Chip>
+  ) : ws.places_key_ok ? (
+    <Chip tone="ok">Connected</Chip>
+  ) : ws.places_key_ok === false ? (
+    <Chip tone="bad">Key rejected</Chip>
+  ) : (
+    <Chip tone="warn">Not tested</Chip>
+  )
+  return (
+    <Card title="Google ratings" subtitle="Optional. Adds Google rating and review count for the client and its competitors to research reports." action={chip}>
+      <form
+        className="flex items-end gap-2"
+        onSubmit={(e) => {
+          e.preventDefault()
+          key.mutate(apiKey ? { action: 'save', apiKey } : { action: 'test' })
+        }}
+      >
+        <Field label="Google Places API key" className="flex-1">
+          <div className="relative">
+            <Input
+              type="password"
+              autoComplete="off"
+              value={apiKey}
+              onChange={(e) => setApiKey(e.target.value)}
+              placeholder={ws?.places_key_hint ? `••••••••••••${ws.places_key_hint}` : 'AIza…'}
+              className="pr-9"
+            />
+            <Lock className="absolute top-2.5 right-3 size-4 text-fg-3" />
+          </div>
+        </Field>
+        <Button type="submit" loading={key.isPending} disabled={!apiKey && !ws?.places_key_hint}>
+          {apiKey ? 'Save and test' : 'Test connection'}
+        </Button>
+      </form>
+      <p className="mt-2 text-xs text-fg-3">
+        {key.data
+          ? key.data.message
+          : key.error
+            ? (key.error as Error).message
+            : 'Google Cloud console → APIs and services → turn on Places API (New) → Credentials → Create API key.'}
+      </p>
+    </Card>
   )
 }

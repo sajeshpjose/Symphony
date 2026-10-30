@@ -1,4 +1,5 @@
 import { Link, useParams, useSearchParams } from 'react-router'
+import { fmtDate, STATUS_CHIP, useRuns } from '../lib/research'
 import { CHANNEL_LABELS, formalityLabel, humorLabel, lengthLabel } from '@symph/core'
 import { Button, Card, Chip, Note, PageHeader } from '../components/ui'
 import { useClientBundle } from '../lib/client'
@@ -8,6 +9,7 @@ export function ClientPage() {
   const { id } = useParams()
   const [params, setParams] = useSearchParams()
   const { data, error } = useClientBundle(id)
+  const runs = useRuns(id)
   if (error) return <Note tone="bad">{(error as Error).message}</Note>
   if (!data) return null
   const { client, voice, facts, examples } = data
@@ -33,7 +35,7 @@ export function ClientPage() {
         crumb={<Link to="/clients">Clients</Link>}
         title={client.name}
         subtitle={[client.website, client.industry, client.location].filter(Boolean).join(' · ')}
-        actions={<Button variant="primary" disabled title="Coming in the next build step">Run research</Button>}
+        actions={<Link to={`/research/new?client=${client.id}`}><Button variant="primary">Run research</Button></Link>}
       />
       <div className="grid grid-cols-[1fr_360px] gap-6">
         <div className="flex flex-col gap-6">
@@ -63,7 +65,23 @@ export function ClientPage() {
               <Row label="Social copy for" value={client.social_channels.map((c) => CHANNEL_LABELS[c as keyof typeof CHANNEL_LABELS] ?? c).join(', ')} />
             </div>
           </Card>
-          <Note title="Next: research">Research runs as a long job on Trigger.dev. It is being built next.</Note>
+          <Card title="Research" subtitle="Site, competitors and exports, checked fact by fact">
+            {runs.data?.length ? (
+              <div className="flex flex-col gap-2.5 text-sm">
+                {runs.data.slice(0, 4).map((r) => {
+                  const [label, tone] = STATUS_CHIP[r.status]
+                  return (
+                    <Link key={r.id} to={`/research/${r.id}`} className="flex items-center justify-between gap-3 hover:underline">
+                      <span className="text-fg-2">{fmtDate(r.created_at)}</span>
+                      <Chip tone={tone}>{label}</Chip>
+                    </Link>
+                  )
+                })}
+              </div>
+            ) : (
+              <p className="text-sm text-fg-2">No research yet. Run it to get a report and the questions for your first meeting.</p>
+            )}
+          </Card>
         </div>
       </div>
     </>

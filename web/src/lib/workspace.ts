@@ -7,6 +7,9 @@ export type Workspace = {
   anthropic_key_hint: string | null
   anthropic_key_ok: boolean | null
   anthropic_key_tested_at: string | null
+  places_key_hint: string | null
+  places_key_ok: boolean | null
+  places_key_tested_at: string | null
   models: Record<string, string>
   use_batch: Record<string, boolean>
   monthly_cap_usd: number
