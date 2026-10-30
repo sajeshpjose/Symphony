@@ -5,5 +5,6 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   // Lets `npm run dev:web` call Netlify functions when `netlify dev` runs on 8888.
-  server: { proxy: { '/api': 'http://localhost:8888' } },
+  // Fixed port so Symph never collides with other local Vite apps (e.g. Skipper on 5173).
+  server: { port: 5190, strictPort: true, proxy: { '/api': 'http://localhost:8888' } },
 })
