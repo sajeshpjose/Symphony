@@ -1,8 +1,10 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
 import { CHANNEL_LABELS, CHANNELS, type Channel } from '@symph/core'
+import { Sparkles } from 'lucide-react'
 import { Button, Card, Field, Input, Note, PageHeader, Pill, Textarea, cx } from '../components/ui'
+import { api } from '../lib/api'
 import { useClientBundle } from '../lib/client'
 import { supabase } from '../lib/supabase'
 import { useWorkspace } from '../lib/workspace'
@@ -29,8 +31,14 @@ export function Stepper({ current }: { current: number }) {
   )
 }
 
+type Suggestion = { industry: string; location: string; sells: string; audience: string; run_date: string }
+
+// /clients/new: quick add (name, website, industry, location); research can run straight after.
+// /clients/:id/edit: business details editor. ?all=1 continues into the other profile steps.
 export function NewClient() {
   const nav = useNavigate()
+  const [params] = useSearchParams()
+  const wizard = params.get('all') === '1'
   const qc = useQueryClient()
   const { data: ws } = useWorkspace()
   const { id } = useParams() // set when editing an existing client
@@ -45,6 +53,25 @@ export function NewClient() {
   }, [existing])
   const set = (k: keyof typeof f) => (e: { target: { value: string } }) => setF({ ...f, [k]: e.target.value })
 
+  // Fill from research: suggestions from the latest ready research run, only into empty fields.
+  const hasResearch = useQuery({
+    queryKey: ['latest-ready-run', id],
+    enabled: !!id,
+    queryFn: async () => {
+      const { data } = await supabase.from('research_runs').select('id').eq('client_id', id!).eq('status', 'ready').limit(1)
+      return !!data?.length
+    },
+  })
+  const [filled, setFilled] = useState<string[] | null>(null)
+  const suggest = useMutation({
+    mutationFn: () => api<Suggestion>('suggest-business', { clientId: id }),
+    onSuccess: (sg) => {
+      const keys = (['industry', 'location', 'sells', 'audience'] as const).filter((k) => !f[k].trim() && sg[k]?.trim())
+      setF({ ...f, ...Object.fromEntries(keys.map((k) => [k, sg[k].trim()])) })
+      setFilled(keys.map((k) => ({ industry: 'industry', location: 'location', sells: 'what they sell', audience: 'who they write for' })[k]))
+    },
+  })
+
   const save = useMutation({
     mutationFn: async () => {
       if (!ws) throw new Error('Workspace not loaded yet')
@@ -56,7 +83,7 @@ export function NewClient() {
       }
       const { data, error } = await supabase
         .from('clients')
-        .insert({ ...row, workspace_id: ws.id, setup_step: 2 })
+        .insert({ ...row, workspace_id: ws.id, status: 'active' })
         .select('id')
         .single()
       if (error) throw error
@@ -67,10 +94,11 @@ export function NewClient() {
     onSuccess: (cid) => {
       qc.invalidateQueries({ queryKey: ['clients'] })
       qc.invalidateQueries({ queryKey: ['client', cid] })
-      nav(`/clients/${cid}?step=2`)
+      nav(id && wizard ? `/clients/${cid}?step=2&all=1` : `/clients/${cid}`)
     },
   })
 
+  const editing = !!id
   return (
     <form
       onSubmit={(e) => {
@@ -79,61 +107,102 @@ export function NewClient() {
       }}
     >
       <PageHeader
-        crumb={id ? `Clients  /  ${existing?.client.name ?? ''}` : 'Clients  /  Add client'}
-        title="Add client"
-        subtitle={`Step 1 of 5 · Business${id && existing ? ` for ${existing.client.name}` : ''}`}
+        crumb={editing ? <Link to={`/clients/${id}`}>Clients  /  {existing?.client.name ?? ''}</Link> : <Link to="/clients">Clients</Link>}
+        title={editing ? 'Business details' : 'Add client'}
+        subtitle={
+          editing
+            ? wizard
+              ? `Step 1 of 5 · Business for ${existing?.client.name ?? ''}`
+              : 'What they do, who they serve and the goal. Needed before writing content.'
+            : 'Name and website are enough to run research. Add the rest whenever you need it.'
+        }
         actions={
           <>
-            <Link to={id ? `/clients/${id}` : '/clients'}><Button type="button">Cancel</Button></Link>
-            <Button variant="primary" type="submit" loading={save.isPending} disabled={!f.name.trim()}>Continue</Button>
+            <Link to={editing ? `/clients/${id}` : '/clients'}><Button type="button">Cancel</Button></Link>
+            <Button variant="primary" type="submit" loading={save.isPending} disabled={!f.name.trim()}>
+              {editing ? (wizard ? 'Continue' : 'Save') : 'Add client'}
+            </Button>
           </>
         }
       />
-      <Stepper current={0} />
+      {editing && wizard && <Stepper current={0} />}
       {save.error && <div className="mb-4"><Note tone="bad">{(save.error as Error).message}</Note></div>}
-      <div className="grid grid-cols-[1fr_360px] gap-6">
-        <div className="flex flex-col gap-6">
-          <Card title="Business" subtitle="What they do and who they serve">
+      {!editing ? (
+        <div className="grid grid-cols-[1fr_360px] gap-6">
+          <Card title="Client">
             <div className="grid grid-cols-2 gap-4">
-              <Field label="Business name"><Input required value={f.name} onChange={set('name')} placeholder="Birch & Co. Landscaping" /></Field>
+              <Field label="Business name"><Input required autoFocus value={f.name} onChange={set('name')} placeholder="Birch & Co. Landscaping" /></Field>
               <Field label="Website"><Input value={f.website} onChange={set('website')} placeholder="birchandco.ca" /></Field>
-              <Field label="Industry"><Input value={f.industry} onChange={set('industry')} placeholder="Landscaping and lawn care" /></Field>
-              <Field label="Location and service area"><Input value={f.location} onChange={set('location')} placeholder="Oakville, Burlington, Milton" /></Field>
-              <Field label="What they sell" className="col-span-2"><Textarea value={f.sells} onChange={set('sells')} placeholder="Spring and fall clean-ups, weekly lawn care…" /></Field>
-              <Field label="Who they write for" className="col-span-2"><Textarea value={f.audience} onChange={set('audience')} placeholder="Homeowners in Halton with busy schedules…" /></Field>
+              <Field label="Industry (optional)"><Input value={f.industry} onChange={set('industry')} placeholder="Landscaping and lawn care" /></Field>
+              <Field label="Location and service area (optional)"><Input value={f.location} onChange={set('location')} placeholder="Oakville, Burlington, Milton" /></Field>
             </div>
           </Card>
-          <Card title="Goal" subtitle="Topics are picked to support this goal">
-            <div className="grid grid-cols-2 gap-4">
-              <Field label="Main goal for the first 3 months"><Input value={f.goal} onChange={set('goal')} placeholder="More booked spring clean-ups" /></Field>
-              <Field label="How you will judge it"><Input value={f.success_measure} onChange={set('success_measure')} placeholder="More quote requests from the blog" /></Field>
-            </div>
-            <div className="mt-4">
-              <div className="mb-2 text-xs font-medium text-fg-2">Social copy for</div>
-              <div className="flex gap-2">
-                {CHANNELS.map((c) => (
-                  <Pill key={c} on={channels.includes(c)} onClick={() => setChannels(channels.includes(c) ? channels.filter((x) => x !== c) : [...channels, c])}>
-                    {CHANNEL_LABELS[c]}
-                  </Pill>
-                ))}
-              </div>
-            </div>
-          </Card>
-        </div>
-        <div className="flex flex-col gap-6">
-          <Card title="What happens after set up">
+          <Card title="What happens next">
             <ol className="flex flex-col gap-3">
-              {['Claude runs the research report', 'You get the next 5 blog topics', 'Claude writes each post and its social copy', 'You review, copy and publish yourself'].map((s, i) => (
+              {['Run research on their website', 'Add business details and voice, using what research found', 'Get the next 5 blog topics', 'Claude writes each post and its social copy'].map((s, i) => (
                 <li key={s} className="flex items-center gap-2.5">
-                  <span className="grid size-6 place-items-center rounded-sm bg-tint text-xs font-medium text-casal">{i + 1}</span>
+                  <span className="grid size-6 shrink-0 place-items-center rounded-sm bg-tint text-xs font-medium text-casal">{i + 1}</span>
                   {s}
                 </li>
               ))}
             </ol>
           </Card>
-          <Note title="From research">Research runs when you finish set up. Facts and audiences it finds are offered in steps 3 and 4.</Note>
         </div>
-      </div>
+      ) : (
+        <div className="grid grid-cols-[1fr_360px] gap-6">
+          <div className="flex flex-col gap-6">
+            <Card
+              title="Business"
+              subtitle="What they do and who they serve"
+              action={
+                <Button
+                  type="button"
+                  onClick={() => suggest.mutate()}
+                  loading={suggest.isPending}
+                  disabled={!hasResearch.data}
+                  title={hasResearch.data ? 'Suggest from the latest research report' : 'Run research first'}
+                >
+                  <Sparkles className="size-4" /> Fill from research
+                </Button>
+              }
+            >
+              {suggest.error && <div className="mb-3"><Note tone="bad">{(suggest.error as Error).message}</Note></div>}
+              {filled && (
+                <div className="mb-3">
+                  <Note tone={filled.length ? 'accent' : 'warn'}>
+                    {filled.length ? `Filled ${filled.join(', ')} from research. Check them, then save.` : 'Research had nothing to add to the empty fields.'}
+                  </Note>
+                </div>
+              )}
+              <div className="grid grid-cols-2 gap-4">
+                <Field label="Business name"><Input required value={f.name} onChange={set('name')} /></Field>
+                <Field label="Website"><Input value={f.website} onChange={set('website')} placeholder="birchandco.ca" /></Field>
+                <Field label="Industry"><Input value={f.industry} onChange={set('industry')} placeholder="Landscaping and lawn care" /></Field>
+                <Field label="Location and service area"><Input value={f.location} onChange={set('location')} placeholder="Oakville, Burlington, Milton" /></Field>
+                <Field label="What they sell" help="Needed for content" className="col-span-2"><Textarea value={f.sells} onChange={set('sells')} placeholder="Spring and fall clean-ups, weekly lawn care…" /></Field>
+                <Field label="Who they write for" help="Needed for content" className="col-span-2"><Textarea value={f.audience} onChange={set('audience')} placeholder="Homeowners in Halton with busy schedules…" /></Field>
+              </div>
+            </Card>
+            <Card title="Goal" subtitle="Topics are picked to support this goal">
+              <div className="grid grid-cols-2 gap-4">
+                <Field label="Main goal for the first 3 months"><Input value={f.goal} onChange={set('goal')} placeholder="More booked spring clean-ups" /></Field>
+                <Field label="How you will judge it"><Input value={f.success_measure} onChange={set('success_measure')} placeholder="More quote requests from the blog" /></Field>
+              </div>
+              <div className="mt-4">
+                <div className="mb-2 text-xs font-medium text-fg-2">Social copy for</div>
+                <div className="flex gap-2">
+                  {CHANNELS.map((c) => (
+                    <Pill key={c} on={channels.includes(c)} onClick={() => setChannels(channels.includes(c) ? channels.filter((x) => x !== c) : [...channels, c])}>
+                      {CHANNEL_LABELS[c]}
+                    </Pill>
+                  ))}
+                </div>
+              </div>
+            </Card>
+          </div>
+          <Note title="From research">Fill from research suggests the industry, area, what they sell and who they serve from the facts in the latest report. It only fills empty fields.</Note>
+        </div>
+      )}
     </form>
   )
 }

@@ -1,8 +1,9 @@
-// Add client, steps 2–5: Voice and tone, Rules and claims, Facts, Examples.
-// Step 1 (Business) is NewClient.tsx. Each step saves on Continue; facts and examples save as you add them.
+// Content profile editors: Voice and tone, Rules and claims, Facts, Examples (steps 2 to 5).
+// Business details (step 1) is NewClient.tsx. Opened one at a time from the client page, or in order
+// with "Set it all up" (?all=1). Each step saves on Save or Continue; facts and examples save as you add them.
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Trash2 } from 'lucide-react'
-import { useEffect, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router'
 import {
   CHANNEL_LABELS,
@@ -37,6 +38,9 @@ async function advance(client: ClientRow, to: number) {
   if (error) throw error
 }
 
+// true when one step is opened on its own from the client page
+const SingleStep = createContext(false)
+
 function Shell({ step, client, onBack, onNext, nextLabel = 'Continue', saving, error, children }: {
   step: number
   client: ClientRow
@@ -47,31 +51,31 @@ function Shell({ step, client, onBack, onNext, nextLabel = 'Continue', saving, e
   error?: unknown
   children: ReactNode
 }) {
+  const single = useContext(SingleStep)
   return (
     <>
       <PageHeader
-        crumb={<Link to="/clients">Clients  /  {client.name}</Link>}
-        title="Add client"
-        subtitle={`Step ${step} of 5 · ${STEP_NAMES[step - 1]} for ${client.name}`}
+        crumb={<Link to={`/clients/${client.id}`}>Clients  /  {client.name}</Link>}
+        title={single ? STEP_NAMES[step - 1] : 'Set up content profile'}
+        subtitle={single ? `For ${client.name}` : `Step ${step} of 5 · ${STEP_NAMES[step - 1]} for ${client.name}`}
         actions={
           <>
-            <Button type="button" onClick={onBack}>Back</Button>
-            <Button variant="primary" onClick={onNext} loading={saving}>{nextLabel}</Button>
+            <Button type="button" onClick={onBack}>{single ? 'Cancel' : 'Back'}</Button>
+            <Button variant="primary" onClick={onNext} loading={saving}>{single ? 'Save' : nextLabel}</Button>
           </>
         }
       />
-      <Stepper current={step - 1} />
+      {!single && <Stepper current={step - 1} />}
       {!!error && <div className="mb-4"><Note tone="bad">{(error as Error).message}</Note></div>}
       {children}
     </>
   )
 }
 
-export function ClientSetup({ bundle, step, goTo }: { bundle: Bundle; step: number; goTo: (s: number) => void }) {
-  if (step === 2) return <VoiceStep bundle={bundle} goTo={goTo} />
-  if (step === 3) return <RulesStep bundle={bundle} goTo={goTo} />
-  if (step === 4) return <FactsStep bundle={bundle} goTo={goTo} />
-  return <ExamplesStep bundle={bundle} goTo={goTo} />
+export function ClientSetup({ bundle, step, goTo, single = false }: { bundle: Bundle; step: number; goTo: (s: number) => void; single?: boolean }) {
+  const body =
+    step === 2 ? <VoiceStep bundle={bundle} goTo={goTo} /> : step === 3 ? <RulesStep bundle={bundle} goTo={goTo} /> : step === 4 ? <FactsStep bundle={bundle} goTo={goTo} /> : <ExamplesStep bundle={bundle} goTo={goTo} />
+  return <SingleStep.Provider value={single}>{body}</SingleStep.Provider>
 }
 
 // ---------------------------------------------------------------- Step 2
@@ -431,8 +435,7 @@ function ExamplesStep({ bundle, goTo }: { bundle: Bundle; goTo: (s: number) => v
           if (error) throw error
         }
       }
-      const { error } = await supabase.from('clients').update({ status: 'active', setup_step: 5 }).eq('id', client.id)
-      if (error) throw error
+      await advance(client, 5)
     },
     onSuccess: () => {
       invalidate()
@@ -441,7 +444,7 @@ function ExamplesStep({ bundle, goTo }: { bundle: Bundle; goTo: (s: number) => v
   })
 
   return (
-    <Shell step={5} client={client} onBack={() => goTo(4)} onNext={() => finish.mutate()} nextLabel="Finish set up" saving={finish.isPending} error={finish.error ?? add.error}>
+    <Shell step={5} client={client} onBack={() => goTo(4)} onNext={() => finish.mutate()} nextLabel="Finish" saving={finish.isPending} error={finish.error ?? add.error}>
       <div className="grid grid-cols-[1fr_380px] gap-6">
         <div className="flex flex-col gap-6">
           <Card title="Posts they loved" subtitle="Up to three. Paste the text.">

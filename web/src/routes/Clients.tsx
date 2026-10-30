@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router'
 import { Button, Card, Chip, Empty, Note, PageHeader, Table, type Tone } from '../components/ui'
+import { contentReady, profileItems } from '../lib/profile'
 import { supabase } from '../lib/supabase'
 
 type Row = {
@@ -8,7 +9,11 @@ type Row = {
   name: string
   website: string | null
   status: string
-  voice_profiles: { summary: string | null } | null
+  sells: string | null
+  audience: string | null
+  voice_profiles: { summary: string | null; words_use: string[]; words_avoid: string[]; claims_never: string[]; disclaimer: string | null } | null
+  facts: { status: 'approved' | 'needs_proof' | 'consent_needed' }[]
+  examples: { kind: 'loved' | 'disliked' }[]
   research_runs: { status: string; created_at: string }[]
   topics: { status: string }[]
   posts: { status: string }[]
@@ -29,7 +34,7 @@ export function Clients() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('clients')
-        .select('id, name, website, status, voice_profiles(summary), research_runs(status, created_at), topics(status), posts(status)')
+        .select('id, name, website, status, sells, audience, voice_profiles(summary, words_use, words_avoid, claims_never, disclaimer), facts(status), examples(kind), research_runs(status, created_at), topics(status), posts(status)')
         .order('created_at', { ascending: false })
       if (error) throw error
       return data as unknown as Row[]
@@ -53,12 +58,13 @@ export function Clients() {
           <div className="p-10 text-center text-fg-3">Loading…</div>
         ) : !data?.length ? (
           <Empty title="No clients yet" action={<Link to="/clients/new"><Button variant="primary">Add your first client</Button></Link>}>
-            Add a client, set their voice, and Claude will research them and suggest the next 5 blog topics.
+            Add a client with a name and website, run research, then fill in their voice before writing content.
           </Empty>
         ) : (
-          <Table head={['Client', 'Voice', 'Research', 'Topics', 'Posts', '']}>
+          <Table head={['Client', 'Research', 'Profile', 'Topics', 'Posts', '']}>
             {data.map((c) => {
               const [rLabel, rTone] = researchChip(c.research_runs)
+              const items = profileItems({ client: c, voice: c.voice_profiles, facts: c.facts, examples: c.examples })
               const suggested = c.topics.filter((t) => t.status === 'suggested').length
               const toReview = c.posts.filter((p) => p.status === 'to_review').length
               const reviewed = c.posts.filter((p) => p.status === 'reviewed').length
@@ -68,8 +74,8 @@ export function Clients() {
                     <div className="font-medium">{c.name}</div>
                     {c.website && <div className="text-xs text-fg-3">{c.website}</div>}
                   </td>
-                  <td>{c.voice_profiles?.summary ? <Chip tone="ok">Set</Chip> : <Chip tone="warn">Not set</Chip>}</td>
                   <td><Chip tone={rTone}>{rLabel}</Chip></td>
+                  <td>{contentReady(items) ? <Chip tone="ok">Ready for content</Chip> : <Chip>{items.filter((i) => i.done).length} of {items.length}</Chip>}</td>
                   <td>{suggested ? `${suggested} suggested` : '—'}</td>
                   <td>{toReview ? `${toReview} to review` : reviewed ? `${reviewed} reviewed` : '—'}</td>
                   <td className="text-right">

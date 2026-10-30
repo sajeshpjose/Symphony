@@ -44,9 +44,9 @@ Google Cloud console → APIs and services → enable "Places API (New)" → Cre
 ## Built so far
 - Database: workspaces, clients, voice, examples, facts, research runs, topics, posts, API usage; row-level security; Claude key in Vault; uploads bucket.
 - App: magic-link sign-in, Skipper-styled shell, Clients list, Settings · Claude API (save and test key, models per task, batch toggles, monthly cap, usage this month).
-- Add client, all 5 steps: Business; Voice and tone (sliders, traits, live sample by Claude Haiku, editable summary); Rules and claims (word lists, claims, disclaimer, instant rule check); Facts (add, approve, mark needs proof); Examples (loved and disliked posts, "learn from examples"). Client page shows the voice and rules once set up; every step can be edited later.
+- Add client is quick (name, website, industry, location; D36). The client page holds research and the content profile checklist; each profile part opens on its own, or all in order with "Set it all up". Profile parts: Business; Voice and tone (sliders, traits, live sample by Claude Haiku, editable summary); Rules and claims (word lists, claims, disclaimer, instant rule check); Facts (add, approve, mark needs proof); Examples (loved and disliked posts, "learn from examples"). Client page shows the voice and rules once set up; every step can be edited later.
 - Shared: `voiceBrief()` builds the client brief every Claude call uses (cached); `lintText()` ports the content skill's dash, banned-word and pattern checks.
-- Functions: `/api/claude-key` (save and test the key), `/api/voice-sample`, `/api/learn-voice`.
+- Functions: `/api/claude-key` (save and test the key), `/api/voice-sample`, `/api/learn-voice`, `/api/suggest-business` (fill business details from research).
 - Trigger.dev: config and a `hello-world` task to check the connection.
 - Research (D32 to D35): `research-run` task in `src/trigger/` with the crawler, prompts, Claude calls and Places lookup in `src/research/`; evidence checks in `packages/core/src/research.ts` and upload importers in `packages/core/src/importers.ts`; `/api/research-start`, `/api/places-key`. Screens: Research list, New research run (website, known competitors, pasted text, exports), and the run page (live progress, report, claim review with "Add to facts", meeting questions, pages read).
 
