@@ -21,7 +21,10 @@ describe('buildBlog', () => {
     const types = (built.schema['@graph'] as { '@type': string }[]).map((n) => n['@type'])
     expect(types).toEqual(['Article', 'Organization', 'FAQPage'])
     expect(built.html).toContain('<h1>How do I prepare my lawn for winter in Toronto?</h1>')
-    expect(built.html).toContain('By Mark Birch, Owner, Birch &amp; Co. Landscaping.')
+    // No visible byline or updated line under the heading; the author stays in the markup only.
+    expect(built.html).not.toContain('class="byline"')
+    expect(built.html).not.toMatch(/Updated \d{4}/)
+    expect(built.html).toContain('"jobTitle": "Owner"')
     expect(built.url).toBe('https://birchandco.example/blog/how-to-prepare-lawn-for-winter-toronto')
     expect(built.faq.length).toBeGreaterThanOrEqual(3)
   })
@@ -30,7 +33,6 @@ describe('buildBlog', () => {
     const built = buildBlog(blog, { ...client, author_name: null })
     const article = (built.schema['@graph'] as Record<string, unknown>[])[0]
     expect((article.author as { '@type': string })['@type']).toBe('Organization')
-    expect(built.html).not.toContain('By ')
   })
 
   it('refuses a draft without front matter', () => {
