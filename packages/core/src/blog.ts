@@ -168,9 +168,6 @@ export function buildBlog(raw: string, client: BlogClient, opts: { url?: string 
     })
   }
   const schema = { '@context': 'https://schema.org', '@graph': graph }
-  const byline =
-    (client.author_name ? `By ${escHtml(client.author_name)}${client.author_role ? `, ${escHtml(client.author_role)}` : ''}, ${escHtml(client.name)}. ` : '') +
-    `Updated ${escHtml(updated)}.`
   const html = `<!doctype html>
 <html lang="${escHtml(lang, true)}">
 <head>
@@ -186,7 +183,6 @@ ${JSON.stringify(schema, null, 2).replace(/</g, '\\u003c')}
 <article>
 <header>
 <h1>${escHtml(meta.title)}</h1>
-<p class="byline">${byline}</p>
 </header>
 ${mdToHtml(body)}
 </article>

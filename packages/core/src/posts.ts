@@ -90,7 +90,7 @@ export function postInstruction(c: PostContext, retry?: { previous: PostResult; 
       c.topic.service && `Linked service: ${c.topic.service}`,
       c.topic.why && `Why this topic: ${c.topic.why}`,
       `Date for the front matter: ${c.today}`,
-      c.client.author_name && `Author: ${c.client.author_name}${c.client.author_role ? `, ${c.client.author_role}` : ''} (shown automatically; do not add a byline)`,
+      c.client.author_name && `Author: ${c.client.author_name}${c.client.author_role ? `, ${c.client.author_role}` : ''} (used in the page markup only; do not write a byline)`,
     ]
       .filter(Boolean)
       .join('\n'),
