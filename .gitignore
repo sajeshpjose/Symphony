@@ -16,3 +16,4 @@ samples/
 
 # Trigger.dev
 .trigger
+scripts/.rebuild-post-html.mjs

@@ -14,11 +14,13 @@
     "db:types": "supabase gen types typescript --local > packages/core/src/database.types.ts",
     "dev:trigger": "trigger dev",
     "deploy:trigger": "trigger deploy --env prod",
-    "gen:banned": "node scripts/gen-banned-words.mjs"
+    "gen:banned": "node scripts/gen-banned-words.mjs",
+    "rebuild:html": "esbuild scripts/rebuild-post-html.ts --bundle --platform=node --format=esm --target=node22 --outfile=scripts/.rebuild-post-html.mjs --log-level=error --banner:js=\"import{createRequire}from'module';const require=createRequire(import.meta.url);\" && node --env-file=.env scripts/.rebuild-post-html.mjs"
   },
   "devDependencies": {
     "@trigger.dev/build": "^4.8.2",
     "@types/node": "^26.6.6",
+    "esbuild": "^0.28.2",
     "trigger.dev": "^4.8.2",
     "typescript": "~7.0.2"
   },
